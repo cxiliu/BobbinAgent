@@ -1,0 +1,45 @@
+
+
+
+First Step
+navigate to an aruco marker.
+
+channel, always publishing position of the marker in our coordinate system and bot
+
+
+BRAIN SCENARIO #1 (no obstacles)
+brain is just verifying and choosing neighbors
+
+PICKUP
+    bot wants a bobbin
+    bot signals to BRAIN i want a bobbin
+    BRAIN finds closest bobbin for the bot
+        we know its close cuz BRAIN measured distances to all bobbins and found closest one
+    then BRAIN sends rotation instruction to the bot
+    BOT recieves (target heading) and rotates to meet it
+    BOT activates locomotion (always chekcing heading) and moves to BOBBIN until reaches READY2GRAB distance
+    BOT signals BRAIN, is my position okay?
+    BRAIN verifies if position in tolerance
+        BRAIN halts (step 1) or BRAIN corrects (step 2)
+    if position is okay, BOT intiates pickup behavior (turn 90s,verify distance, grab and lift)
+    BOT checks if bobbin in gripper
+        does a wiggle
+    if its OKAY signal BRAIN that BOT has a bobbin
+
+"REPEAT ABOVE STEPS (aka PICKUP) TO GET ANOTHER BOBBIN"
+
+collision avoidance on arduino (LOCAL) ramdom heading for x seconds
+then return to locomote/heading
+
+once BRAIN sees there are TWO bobbins, says do a TWIST
+or LOCAL to bot
+
+
+
+
+
+
+
+
+the brain > takes the last published coordinate of bot and bobbin,
+    computes distance and vector
