@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "Level2Diagnostic";
-const char* password = "19L0rD$t@nL3Y";
+const char* ssid = "XXX";
+const char* password = "XXX";
 
 //const char* mqttServer = "broker.hivemq.com";
 IPAddress broker(192,168,1,249);
