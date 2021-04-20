@@ -1,5 +1,18 @@
-const int TURN_COUNT = 300;
+bool tryGrip(){
+  if (frontDistance == PICKING_DISTANCE) {
+    if ((leftDistance > frontDistance + TARGET_OFFSET)
+        && (rightDistance > frontDistance + TARGET_OFFSET)) {
+        
+      runGripperCycle();
+      return true;
+    }
+  }
+  return false;
+}
+
 void runGripperCycle() {
+  Stop();
+  delay(1000);
   // gripper cycle:
   // empty -1> left gripper -2> left+right gripper -3> right gripper -4> empty
   if (leftGripperClosed) {
@@ -40,7 +53,7 @@ void runGripperCycle() {
 
 void grabRight() {
   TurnLeft();
-  delay(TURN_COUNT);
+  delay(TURN_90_STEP);
   Stop();
   delay(200);
   GoRight();
@@ -50,7 +63,7 @@ void grabRight() {
   actuateRightGripper(true);
   delay(600);
   GoLeft();
-  delay(TURN_COUNT);
+  delay(TURN_90_STEP);
   //  TurnRight();
   //  delay(200);
   Stop();
@@ -58,7 +71,7 @@ void grabRight() {
 
 void grabLeft() {
   TurnRight();
-  delay(TURN_COUNT);
+  delay(TURN_90_STEP);
   Stop();
   delay(200);
   GoLeft();
@@ -68,7 +81,7 @@ void grabLeft() {
   actuateLeftGripper(true);
   delay(600);
   TurnLeft();
-  delay(TURN_COUNT);
+  delay(TURN_90_STEP);
   Stop();
 }
 

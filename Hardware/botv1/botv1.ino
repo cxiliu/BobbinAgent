@@ -27,22 +27,18 @@ int motorSpeed = 150; //0-255
 //int L_motorSpeed = 242;//160; //0-255
 //int F_motorSpeed = 250;//165; //0-255
 // scaled to 12v input (wall mount)
-int B_motorSpeed = 98;//0-255
-int R_motorSpeed = 88;//0-255
-int L_motorSpeed = 100;//0-255
-int F_motorSpeed = 104;//0-255
-//int B_motorSpeed = 78;//0-255
-//int R_motorSpeed = 72;//0-255
-//int L_motorSpeed = 80;//0-255
-//int F_motorSpeed = 82;//0-255
+//int B_motorSpeed = 98;//0-255
+//int R_motorSpeed = 88;//0-255
+//int L_motorSpeed = 100;//0-255
+//int F_motorSpeed = 104;//0-255
+int B_motorSpeed = 100;//0-255
+int R_motorSpeed = 93;//0-255
+int L_motorSpeed = 96;//0-255
+int F_motorSpeed = 90;//0-255
 // BACK - LEFT BACK WHEEL - LEFT CHIP IN1IN2 (in1 CC)
 // RIGHT - RIGHT BACK WHEEL - LEFT CHIP IN3IN4
 // LEFT - LEFT FRONT WHEEL - RIGHT CHIP IN1IN2 (in1 CC)
 // FRONT - RIGHT FRONT WHEEL - RIGHT CHIP IN3IN4 (in1 C)
-
-// sensors
-int sensorCounter = 0;
-
 
 // eyes
 #define L_TRIG 22
@@ -58,8 +54,8 @@ int sensorCounter = 0;
 //#define F_TRIG 26
 //#define R_ECHO 32
 //#define R_TRIG 30
-const int AVOIDANCE_THRESHOLD = 12; //cm
-const int COLLISION_THRESHOLD = 8; //cm
+const int TARGET_OFFSET = 3;
+const int COLLISION_THRESHOLD = 12; //cm
 const int PICKING_DISTANCE = 5; //cm
 int leftDistance = 0;
 int rightDistance = 0;
@@ -84,7 +80,7 @@ bool leftGripperClosed = false;
 const int OPEN_DEG = 0;
 const int LOW_DEG = 90;
 //closed
-const int CLOSE_DEG = 100;//110
+const int CLOSE_DEG = 80;//100//110
 const int HIGH_DEG = 10;
 //const int OPEN_DEG = 20;
 //const int CLOSE_DEG = 80;
@@ -98,10 +94,10 @@ MMA8452Q accel;
 String headingData;
 
 // joystick
-bool autoMode = true;
-String currentMode = "auto";
-//bool autoMode = false;
-//String currentMode = "manual";
+//bool autoMode = true;
+//String currentMode = "auto";
+bool autoMode = false;
+String currentMode = "manual";
 #define sw 31
 #define jX A0
 #define jY A1
@@ -117,7 +113,11 @@ String DirName;
 const int rs = 34, en = 36, d4 = 46, d5 = 48, d6 = 50, d7 = 52;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-
+// encoded pulse lengths for specific moves
+const int TINY_STEP = 50;
+const int SMALL_STEP = 200;
+const int LARGE_STEP = 250;
+const int TURN_90_STEP = 300;
 bool waiting = false;
 
 void setup() {
@@ -139,26 +139,25 @@ void setup() {
   analogWrite(L_enA, L_motorSpeed);
   analogWrite(F_enA, F_motorSpeed);
 
-  pinMode(F_ECHO, INPUT);
-  pinMode(F_TRIG, OUTPUT);
-  pinMode(L_ECHO, INPUT);
-  pinMode(L_TRIG, OUTPUT);
+//  pinMode(F_ECHO, INPUT);
+//  pinMode(F_TRIG, OUTPUT);
+//  pinMode(L_ECHO, INPUT);
+//  pinMode(L_TRIG, OUTPUT);
   pinMode(R_ECHO, INPUT);
   pinMode(R_TRIG, OUTPUT);
   Wire.begin();
   if (accel.begin() == false) {
-    Serial.println("Not Connected");
+    Serial.println("Compass not Connected");
   }
 
   rightGripper.attach(R_Gripper);
   rightGripper.write(OPEN_DEG);
   rightLifter.attach(R_Lifter);
   rightLifter.write(LOW_DEG);
-  leftGripper.attach(L_Gripper);
-  leftGripper.write(OPEN_DEG);
-  leftLifter.attach(L_Lifter);
-  leftLifter.write(LOW_DEG);
-
+//  leftGripper.attach(L_Gripper);
+//  leftGripper.write(OPEN_DEG);
+//  leftLifter.attach(L_Lifter);
+//  leftLifter.write(LOW_DEG);
   pinMode(sw, INPUT_PULLUP);
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -170,5 +169,5 @@ void setup() {
   lcd.print("Heading: 0,0,0");
 
   randomSeed(analogRead(0));
-  delay(50);
+//  delay(200);
 }

@@ -5,13 +5,9 @@ void loop() {
   }
 
   // get sensor inputs
-  //  sensorCounter += 1;
-  //  if (sensorCounter == 30) {
-  measureDistance();
+  //  measureDistance();
+  measureDistanceRight();
   //    headingData = measureHeading();
-  sensorCounter = 0;
-  //    Serial.println("new readings! ");
-  //  }
 
   // listen for joystick press
   int toggle = digitalRead(sw);
@@ -37,44 +33,45 @@ void loop() {
   }
 
   // grip if possible
-  if (frontDistance == PICKING_DISTANCE) {
-    if ((leftDistance > frontDistance)
-        && (rightDistance > frontDistance)) {
-      runGripperCycle();
-    }
-  }
+  //  tryGrip()
 
   // locomotion
-  if (autoMode) {
-    // obstacle avoidance
-    Locomote();
-  } else {
-    // listen for joystick pushes
-    joystickCommand = getJoystickDirection();
-    if (joystickCommand != lastJoystickCommand) {
-      lastJoystickCommand = joystickCommand;
-      SetMotors(joystickCommand);
-      //      Serial.println(DirName);
-    }
-  }
+//  if (autoMode) {
+//    Locomote();
+//  } else {
+//    // listen for joystick pushes
+//    joystickCommand = getJoystickDirection();
+//    if (joystickCommand != lastJoystickCommand) {
+//      lastJoystickCommand = joystickCommand;
+//      if (joystickCommand != 5) {
+//        int on = 30;
+//        int off = 20;
+//        // six cycles
+//        for (int i = 0; i < 6; i++) {
+//          SetMotors(joystickCommand);
+//          delay(on);
+//          SetMotors(5);
+//          delay(off);
+//        }
+//        delay(500);
+//      }
+//      else {
+//        SetMotors(joystickCommand );
+//      }
+//    }
+//  }
 
   // show info on lcd
   writeData();
 
   delay(10);
 
-  //  if (Serial.available() > 0) {
-  //    // read the incoming byte:
-  //    incomingByte = Serial.read();
-  //
-  //      //s 115
-  //      //d 100
-  //      //encode incoming bytes to bot instructions
-  //
-  //      if (incomingByte == 115){
-  //      }
-  //      // say what you got:
-  //    Serial.print("I received: ");
-  //    Serial.println(incomingByte, DEC);
-  //  }
+  if (Serial.available() > 0) {
+    incomingByte = Serial.read();
+    Serial.print("Received: ");
+    Serial.println(incomingByte, DEC);
+    
+//    LocomotionTest(incomingByte);
+    CommunicationIntegrationTest(incomingByte);
+  }
 }
