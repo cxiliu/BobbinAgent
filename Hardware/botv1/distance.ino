@@ -60,9 +60,10 @@ void measureDistanceRight() {
   digitalWrite(R_TRIG, LOW);
   const unsigned long durationR = pulseIn(R_ECHO, HIGH);
   rightDistance = durationR / 29 / 2;
-  if (durationR == 0) {
+  /*if (durationR == 0) {
     Serial.println("Warning: no pulse from right sensor");
   }
+  */
 }
 
 void writeData() {

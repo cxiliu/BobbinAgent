@@ -120,8 +120,16 @@ const int LARGE_STEP = 250;
 const int TURN_90_STEP = 300;
 bool waiting = false;
 
+//COMM TEST - variables
+String curString; // variable to store incoming serial data as String
+int curVal;
+int rotVal;
+
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  //COMM TEST - initialize bobbin count to 0
+  Serial.print("bobbins/0");
+  
   pinMode(B_enA, OUTPUT);
   pinMode(B_in1, OUTPUT);
   pinMode(B_in2, OUTPUT);
