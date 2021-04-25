@@ -116,8 +116,8 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 // encoded pulse lengths for specific moves
 const int TINY_STEP = 50;
 const int SMALL_STEP = 200;
-const int LARGE_STEP = 250;
-const int TURN_90_STEP = 300;
+const int LARGE_STEP = 250; //250
+const int TURN_90_STEP = 300; //300
 bool waiting = false;
 
 //COMM TEST - variables

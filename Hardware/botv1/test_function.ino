@@ -42,12 +42,12 @@ void dropoff() {
 void rotateDegree(int degree) {
   if (degree > 0) {
     TurnLeft45();
-    delay(int(degree * (TURN_90_STEP / 90)));
+    delay(int(degree*1.5 * (TURN_90_STEP / 90)));
     Stop();
   }
   else {
     TurnRight45();
-    delay(int(-degree * (TURN_90_STEP / 90)));
+    delay(int(-degree*1.5 * (TURN_90_STEP / 90)));
     Stop();
   }
 }
