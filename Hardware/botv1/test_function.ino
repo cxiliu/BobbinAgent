@@ -27,6 +27,8 @@ void pickup() {
   TurnRight45();
   delay(TURN_90_STEP / 2);
   Stop();
+
+  actuateRightGripper(false);
 }
 
 // open right gripper, move away 5cm, and stop

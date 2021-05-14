@@ -43,9 +43,11 @@ void loop() {
   
       else if (curVal == 4){           // keypress 4 sim for pickup func. 52
         Serial.print("status/grabbing");
-        pickup();
-        delay(2000); // performing grab action
+        delay(1000);
         Serial.print("bobbins/1"); // update counter
+        pickup();
+        //delay(2000); // performing grab action
+        
         delay(2000);
         Serial.print("status/idle");
       }
@@ -59,9 +61,11 @@ void loop() {
   
       else if (curVal == 7){           // keypress 7 for drop 55 
         Serial.print("status/dropping");
-        dropoff();
-        delay(2000);
+        delay(1000);
         Serial.print("bobbins/2");
+        dropoff();
+        //delay(2000);
+        
         delay(2000);
         Serial.print("status/idle");
       }

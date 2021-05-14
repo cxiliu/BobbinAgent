@@ -154,9 +154,9 @@ void setup() {
   pinMode(R_ECHO, INPUT);
   pinMode(R_TRIG, OUTPUT);
   Wire.begin();
-  if (accel.begin() == false) {
-    Serial.println("Compass not Connected");
-  }
+  //if (accel.begin() == false) {
+    //Serial.println("Compass not Connected");
+  //}
 
   rightGripper.attach(R_Gripper);
   rightGripper.write(OPEN_DEG);
