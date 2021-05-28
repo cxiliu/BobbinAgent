@@ -35,8 +35,8 @@ void GoForward45(int distance) {
   currentDirection = "forward";
 }
 
-void GoBackward45() {
-  SetpointFL = distanceToSignals(10);
+void GoBackward45(int distance) {
+  SetpointFL = distanceToSignals(distance);
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -53,9 +53,9 @@ void GoBackward45() {
   currentDirection = "backward";
 }
 
-void GoRight45() {
+void GoRight45(int distance) {
   // FL and FR are cc, but actually BL and BR
-  SetpointFL = distanceToSignals(10);
+  SetpointFL = distanceToSignals(distance);
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -71,9 +71,9 @@ void GoRight45() {
   currentDirection = "go right";
 }
 
-void GoLeft45() {
+void GoLeft45(int distance) {
   // BL and BR are cc, but actually FL and FR
-  SetpointFL = distanceToSignals(10);
+  SetpointFL = distanceToSignals(distance);
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;

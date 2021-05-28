@@ -52,17 +52,17 @@ void LocomotionTest(int _receivedByte) {
   }
   else if (_receivedByte == 97) {
     LOCOMOTION_ACTIVE = true;
-    GoLeft45(); //a - left - 4
+    GoLeft45(10); //a - left - 4
 //    delay(LARGE_STEP);
   }
   else if (_receivedByte == 100) {
     LOCOMOTION_ACTIVE = true;
-    GoRight45(); //d - right - 6
+    GoRight45(10); //d - right - 6
 //    delay(LARGE_STEP);
   }
   else if (_receivedByte == 122) {
     LOCOMOTION_ACTIVE = true;
-    GoBackward45(); //z - back - 2
+    GoBackward45(10); //z - back - 2
 //    delay(LARGE_STEP);
   }
   else if (_receivedByte == 113) {

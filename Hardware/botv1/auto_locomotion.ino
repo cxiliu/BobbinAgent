@@ -92,11 +92,3 @@
 //  Stop();
 //  delay(50);
 //}
-
-void GoLeft() {
-  GoLeft45();
-}
-
-void GoRight() {
-  GoRight45();
-}

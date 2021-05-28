@@ -1,5 +1,4 @@
 #include <PID_v1.h>
-
 #include <Servo.h>
 #include <Wire.h>
 #include "SparkFun_MMA8452Q.h"
@@ -7,6 +6,7 @@
 
 bool DistanceOn = false;
 bool DisplayOn = false;
+bool COMMUNICATION_ENABLED = false;
 
 // wheels
 // BACK - LEFT BACK WHEEL - LEFT CHIP IN1IN2 (in1 CC)
@@ -161,9 +161,17 @@ int motorUpdateTime = 0;
 int minPwm = 60;
 int maxPwm = 120;
 
+//COMM TEST - variables
+String curString; // variable to store incoming serial data as String
+int curVal;
+int rotVal;
+
 void setup() {
   Serial.begin(9600);
-  // H bridge motor controls
+  // Serial.begin(115200);
+  //COMM TEST - initialize bobbin count to 0
+  Serial.print("bobbins/0");
+  
   pinMode(B_enA, OUTPUT);
   pinMode(B_in1, OUTPUT);
   pinMode(B_in2, OUTPUT);
@@ -204,6 +212,10 @@ void setup() {
   pinMode(L_TRIG, OUTPUT);
   pinMode(R_ECHO, INPUT);
   pinMode(R_TRIG, OUTPUT);
+  Wire.begin();
+  //if (accel.begin() == false) {
+    //Serial.println("Compass not Connected");
+  //}
 
   //  Wire.begin();
   //  if (accel.begin() == false) {

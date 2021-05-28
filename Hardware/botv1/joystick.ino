@@ -16,14 +16,14 @@ void SetMotors(int command) {
     GoForward45(10);
   }
   else if ((command == 3) || (command == 2) || (command == 1)) {
-    GoBackward45();
+    GoBackward45(10);
   }
   else if (command == 4) {
     if (leftGripperClosed && rightGripperClosed) {
       TurnLeft45(90);
     }
     else {
-      GoLeft45(); // parallel movement
+      GoLeft45(10); // parallel movement
     }
   }
   else if (command == 6) {
@@ -31,7 +31,7 @@ void SetMotors(int command) {
       TurnRight45(90);
     }
     else {
-      GoRight45(); // parallel movement
+      GoRight45(10); // parallel movement
     }
   }
   else {
