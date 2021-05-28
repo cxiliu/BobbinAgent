@@ -1,13 +1,109 @@
-bool tryGrip(){
-  if (frontDistance == PICKING_DISTANCE) {
-    if ((leftDistance > frontDistance + TARGET_OFFSET)
-        && (rightDistance > frontDistance + TARGET_OFFSET)) {
-        
-      runGripperCycle();
-      return true;
-    }
+void actuateRightGripper(bool grippp) {
+  if (grippp) {
+    lowerBobbins();
+    rightGripper.write(180 - CLOSE_DEG);
+    delay(1000);
+    liftBobbins();
   }
-  return false;
+  else {
+    lowerBobbins();
+    rightGripper.write(180 - OPEN_DEG);
+    delay(1000);
+    liftBobbins();
+  }
+}
+
+
+void actuateLeftGripper(bool grippp) {
+  if (grippp) {
+    lowerBobbins();
+    leftGripper.write(CLOSE_DEG);
+    delay(1000);
+    liftBobbins();
+  }
+  else {
+    lowerBobbins();
+    leftGripper.write(OPEN_DEG);
+    delay(1000);
+    liftBobbins();
+  }
+}
+
+bool LowerSwitchTriggered() {
+  if (!digitalRead(R_LOW_POS)) {
+    lowerTriggered = true;
+    Serial.println("right low switch triggered");
+    return lowerTriggered;
+  }
+  if (!digitalRead(L_LOW_POS)) {
+    lowerTriggered = true;
+    Serial.println("left low switch triggered");
+    return lowerTriggered;
+  }
+  lowerTriggered = false;
+  return lowerTriggered;
+}
+
+bool TopSwitchTriggered() {
+  if (!digitalRead(TOP_POS)) {
+    upperTriggered = true;
+    Serial.println("top switch triggered");
+  } else {
+    upperTriggered = false;
+  }
+  return upperTriggered;
+}
+
+int NumOfSteps = 850; // FULL RANGE 850
+//int NumOfSteps = 425;
+//int NumOfSteps = 50;
+
+void liftBobbins() {
+  //  if (TopSwitchTriggered()) {
+  //    Serial.println("warning: top limit switch preventing movement");
+  //    return;
+  //  }
+  int count = 0;
+  digitalWrite(DIR, LOW);
+  delay(100);
+  while (count <= NumOfSteps) { // 20mm
+    if (TopSwitchTriggered()) {
+      Serial.println("warning: top limit switch preventing movement");
+      Serial.println(count);
+      return;
+    }
+    digitalWrite(DIR, LOW);
+    digitalWrite(STEP, HIGH);
+    delay(2);
+    digitalWrite(STEP, LOW);
+    delay(2);
+    count += 1;
+  }
+  delay(800);
+}
+
+void lowerBobbins() {
+  //  if (LowerSwitchTriggered()) {
+  //    Serial.println("warning: lower limit switch preventing movement");
+  //    return;
+  //  }
+  int count = 0;
+  digitalWrite(DIR, HIGH);
+  delay(100);
+  while (count <= NumOfSteps) { // 20mm
+    if (LowerSwitchTriggered()) {
+      Serial.println("warning: lower limit switch preventing movement");
+      Serial.println(count);
+      return;
+    }
+    digitalWrite(DIR, HIGH);
+    digitalWrite(STEP, HIGH);
+    delay(2);
+    digitalWrite(STEP, LOW);
+    delay(2);
+    count += 1;
+  }
+  delay(800);
 }
 
 void runGripperCycle() {
@@ -26,8 +122,7 @@ void runGripperCycle() {
       // 2: left only -> full
       Serial.println("grip right");
       currentMode = "gripR";
-      //      actuateRightGripper(true);
-      grabRight();
+      actuateRightGripper(true);
       rightGripperClosed = true;
     }
   } else {
@@ -41,8 +136,7 @@ void runGripperCycle() {
       //1: empty -> left only
       Serial.println("grip left");
       currentMode = "gripL";
-      //      actuateLeftGripper(true);
-      grabLeft();
+      actuateLeftGripper(true);
       leftGripperClosed = true;
     }
   }
@@ -51,67 +145,48 @@ void runGripperCycle() {
   // end of gripper cycle
 }
 
-void grabRight() {
-  TurnLeft();
-  delay(TURN_90_STEP);
-  Stop();
-  delay(200);
-  GoRight();
-  delay(200);
-  Stop();
-  delay(600);
-  actuateRightGripper(true);
-  delay(600);
-  GoLeft();
-  delay(TURN_90_STEP);
-  //  TurnRight();
-  //  delay(200);
-  Stop();
-}
+//bool tryGrip() {
+//  if (frontDistance == PICKING_DISTANCE) {
+//    if ((leftDistance > frontDistance + TARGET_OFFSET)
+//        && (rightDistance > frontDistance + TARGET_OFFSET)) {
+//
+//      runGripperCycle();
+//      return true;
+//    }
+//  }
+//  return false;
+//}
 
-void grabLeft() {
-  TurnRight();
-  delay(TURN_90_STEP);
-  Stop();
-  delay(200);
-  GoLeft();
-  delay(200);
-  Stop();
-  delay(600);
-  actuateLeftGripper(true);
-  delay(600);
-  TurnLeft();
-  delay(TURN_90_STEP);
-  Stop();
-}
-
-void actuateRightGripper(bool grippp) {
-  if (grippp) {
-    rightGripper.write(CLOSE_DEG);
-    delay(1000);
-    rightLifter.write(HIGH_DEG);
-    digitalWrite(LED_BUILTIN, HIGH);
-  }
-  else {
-    rightGripper.write(OPEN_DEG);
-    delay(1000);
-    rightLifter.write(LOW_DEG);
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-}
-
-
-void actuateLeftGripper(bool grippp) {
-  if (grippp) {
-    leftGripper.write(CLOSE_DEG);
-    delay(1000);
-    leftLifter.write(HIGH_DEG);
-    digitalWrite(LED_BUILTIN, HIGH);
-  }
-  else {
-    leftGripper.write(OPEN_DEG);
-    delay(1000);
-    leftLifter.write(LOW_DEG);
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-}
+//void grabRight() {
+//  TurnLeft();
+//  delay(TURN_90_STEP);
+//  Stop();
+//  delay(200);
+//  GoRight();
+//  delay(200);
+//  Stop();
+//  delay(600);
+//  actuateRightGripper(true);
+//  delay(600);
+//  GoLeft();
+//  delay(TURN_90_STEP);
+//  //  TurnRight();
+//  //  delay(200);
+//  Stop();
+//}
+//
+//void grabLeft() {
+//  TurnRight();
+//  delay(TURN_90_STEP);
+//  Stop();
+//  delay(200);
+//  GoLeft();
+//  delay(200);
+//  Stop();
+//  delay(600);
+//  actuateLeftGripper(true);
+//  delay(600);
+//  TurnLeft();
+//  delay(TURN_90_STEP);
+//  Stop();
+//}

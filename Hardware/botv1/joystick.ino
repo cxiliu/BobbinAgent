@@ -3,50 +3,36 @@
 // use joystick to control direction
 
 void SetMotors(int command) {
+  ResetEncoders();
   //8 forward, 7, 9
   //2 reverse, 1, 3
   //4 left
   //6 right
   //5 stop
   if (command == 5) {
-    //    if (waiting){
-    //      Serial.println("continuing");
-    //      return;
-    //    }
     Stop();
-//    Serial.println("stopped");
   }
   else if ((command == 8) || (command == 7) || (command == 9)) {
-    GoForward45();
-    //    GoForward();
-//    Serial.println("forward");
+    GoForward45(10);
   }
   else if ((command == 3) || (command == 2) || (command == 1)) {
     GoBackward45();
-    //    GoBackward();
-//    Serial.println("backward");
   }
   else if (command == 4) {
     if (leftGripperClosed && rightGripperClosed) {
-      TurnLeft45();
-      //      TurnLeft();
+      TurnLeft45(90);
     }
     else {
-      GoLeft45(); // parallel
-      //      GoLeft();
+      GoLeft45(); // parallel movement
     }
-//    Serial.println("left");
   }
   else if (command == 6) {
     if (leftGripperClosed && rightGripperClosed) {
-      TurnRight45();
-      //      TurnRight();
+      TurnRight45(90);
     }
     else {
-      GoRight45();
-      //      GoRight();// parallel
+      GoRight45(); // parallel movement
     }
-//    Serial.println("right");
   }
   else {
     Stop();
