@@ -1,17 +1,16 @@
 bool PID_DEBUG = false;
 
+
+void LoopPID(){
+  while (LOCOMOTION_ACTIVE){
+    MotorPID();
+  }
+}
+
+
 void MotorPID() {
   // visualise encoder increments during movement
   //    PrintEncoderInfo(" ");
-
-  // prevent disasters
-  if (badCounter >= 1000000) {
-    LOCOMOTION_ACTIVE = false;
-    Stop();
-    PrintEncoderInfo("--- Force Stop ---"); // FR FL BR BL
-    badCounter = 0;
-  }
-
   unsigned long currentMicros = micros();
   float timeElapsed = currentMicros - previousMicros;
   previousMicros = currentMicros;
@@ -20,6 +19,16 @@ void MotorPID() {
 
   // do PID every 10 ms
   if (motorUpdateTime > 10000) {
+
+    // prevent disasters
+    if (badCounter >= 150) {
+      LOCOMOTION_ACTIVE = false;
+      Stop();
+      ResetEncoders();
+      PrintEncoderInfo("--- Force Stop ---"); // FR FL BR BL
+      badCounter = 0;
+      return;
+    }
 
     //    float secEllpased = motorUpdateTime / 1000000.f;
     motorUpdateTime -= 10000;
@@ -156,18 +165,19 @@ void MotorPID() {
     if (FR_reached && FL_reached && BR_reached && BL_reached) {
       LOCOMOTION_ACTIVE = false;
       Stop();
-      Serial.print("FR filtered "); Serial.print(filterActiveCountFR); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedFR);
-      Serial.print("FL filtered "); Serial.print(filterActiveCountFL); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedFL);
-      Serial.print("BR filtered "); Serial.print(filterActiveCountBR); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedBR);
-      Serial.print("BL filtered "); Serial.print(filterActiveCountBL); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedBL);
-      if (true) {
-        PrintEncoderInfo("--- Motion Complete ---");
-      }
+      //Serial.print("FR filtered "); Serial.print(filterActiveCountFR); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedFR);
+      //Serial.print("FL filtered "); Serial.print(filterActiveCountFL); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedFL);
+      //Serial.print("BR filtered "); Serial.print(filterActiveCountBR); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedBR);
+      //Serial.print("BL filtered "); Serial.print(filterActiveCountBL); Serial.print("  noise frequency: "); Serial.println((float)1000.0 / filterSignalSpeedBL);
+      //      if (true) {
+      //        PrintEncoderInfo("--- Motion Complete ---");
+      //      }
       ResetEncoders();
       badCounter = 0;
     }
 
     badCounter += 1;
+//    Serial.println(badCounter);
     return;
   }
 }

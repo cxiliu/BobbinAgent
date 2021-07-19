@@ -10,11 +10,12 @@
 
 float distanceToSignals(int distance){
   float scale = 2.82; // somewhat arbitrary ratio
-  return int(40 / scale * 10 * distance * sqrt(2) / 150.8);
+  return int(40.0 / scale * 10 * distance * sqrt(2) / 150.8);
 }
 
 float degreeToSignals(int degree){
-  return int(40 * (487 * degree / 360.f) / 150.8);
+  float scale = 2.0; // somewhat arbitrary ratio
+  return int(40.0 / scale * (487.0 * degree / 360.0) / 150.8);
 }
 
 void GoForward45(int distance) {
@@ -109,6 +110,14 @@ void TurnRight45(int degree) {
 
 void TurnLeft45(int degree) {
   SetpointFL = degreeToSignals(degree);
+  
+//  Serial.print("rotate left ");
+//  Serial.print(degree);
+//  Serial.print("  signal ");
+//  Serial.println(int(40 * (487 * degree / 360.f) / 150.8));
+//  Serial.print("  assigned ");
+//  Serial.println(SetpointFL);
+  
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -123,6 +132,7 @@ void TurnLeft45(int degree) {
   SetBLWheel(true, BL_direction);
   SetBRWheel(true, BR_direction);
   currentDirection = "turn left";
+  
 }
 
 void Stop() {
