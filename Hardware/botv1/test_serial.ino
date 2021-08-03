@@ -76,12 +76,14 @@ void LocomotionTest(int _receivedByte) {
 //    delay(TURN_90_STEP);
   }
   else if (_receivedByte == 103) {
-    //    liftBobbins();
+//        liftBobbins();
+//        Serial.println("lifting bobbins");
     actuateLeftGripper(true); //g - grip
     delay(500);
   }
   else if (_receivedByte == 117) {
-    //    lowerBobbins();
+//        lowerBobbins();
+//        Serial.println("lowering bobbins");
     actuateLeftGripper(false); //u - ungrip
     delay(500);
   }

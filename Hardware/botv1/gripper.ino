@@ -55,6 +55,7 @@ bool TopSwitchTriggered() {
 }
 
 int NumOfSteps = 850; // FULL RANGE 850
+const int STEPPER_DELAY = 2;
 //int NumOfSteps = 425;
 //int NumOfSteps = 50;
 
@@ -74,9 +75,9 @@ void liftBobbins() {
     }
     digitalWrite(DIR, LOW);
     digitalWrite(STEP, HIGH);
-    delay(2);
+    delay(STEPPER_DELAY);
     digitalWrite(STEP, LOW);
-    delay(2);
+    delay(STEPPER_DELAY);
     count += 1;
   }
   delay(800);
@@ -98,9 +99,9 @@ void lowerBobbins() {
     }
     digitalWrite(DIR, HIGH);
     digitalWrite(STEP, HIGH);
-    delay(2);
+    delay(STEPPER_DELAY);
     digitalWrite(STEP, LOW);
-    delay(2);
+    delay(STEPPER_DELAY);
     count += 1;
   }
   delay(800);

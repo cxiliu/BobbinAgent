@@ -4,8 +4,8 @@
 #include "SparkFun_MMA8452Q.h"
 #include <LiquidCrystal.h>
 
-bool DistanceOn = false;
-bool DisplayOn = false;
+bool DistanceOn = true;
+bool DisplayOn = true;
 bool COMMUNICATION_ENABLED = false;
 
 // wheels
@@ -96,7 +96,7 @@ String headingData;
 //bool autoMode = true;
 //String currentMode = "auto";
 bool autoMode = false;
-String currentMode = "manual";
+String currentMode = "Idle";
 #define sw 31
 #define jX A0
 #define jY A1
@@ -157,6 +157,7 @@ bool FR_reversed = false, FL_reversed  = false, BR_reversed  = false, BL_reverse
 
 int badCounter = 0;
 unsigned long previousMicros;
+unsigned long previousMillis;
 int motorUpdateTime = 0;
 int minPwm = 60;
 int maxPwm = 120;
@@ -238,9 +239,9 @@ void setup() {
   lcd.begin(16, 2);
   pinMode(contrast, OUTPUT);
   analogWrite(contrast, 128);
-  lcd.print("F: 0 R: 0 L: 0");
+  lcd.print("");
   lcd.setCursor(0, 1);
-  lcd.print("Heading: 0,0,0");
+  lcd.print("F: 0 R: 0 L: 0");  
 
   randomSeed(analogRead(0));
   //  delay(200);

@@ -2,6 +2,7 @@ void loop() {
 
   if (LOCOMOTION_ACTIVE) {
     MotorPID();
+    return;
   }
 
   if (DistanceOn) {
@@ -84,18 +85,21 @@ void loop() {
 
         if (curVal == 6) {          // keypress 6 sim for distance request 54
           String dPrintText = "distance/";
+          currentMode = "Distance";
           String dPrintVal = dPrintText + frontDistance;
           Serial.print(dPrintVal);
           delay(1000);
         }
 
         else if (curVal == 1) {          // keypress 1 sim for IDLE 49
+          currentMode = "Idle";
           delay(200);
           Serial.print("status/idle");
         }
 
         else if (curVal == 2) {          // keypress 2 sim for rotate func. 50
           delay(1000);
+          currentMode = "Rotate";
           Serial.print("status/rotating " + String(rotVal) + "deg");
           rotateDegree(rotVal);
           delay(2000); // performing rotation
@@ -103,13 +107,14 @@ void loop() {
         }
 
         else if (curVal == 3) {          // keypress 3 sim for move func. 51
-
+          currentMode = "Approach";
           Serial.print("status/approaching");
           moveForwardDistance(5);
         }
 
         else if (curVal == 4) {          // keypress 4 sim for pickup func. 52
           Serial.print("status/grabbing");
+          currentMode = "Grab";
           delay(1000);
           Serial.print("bobbins/1"); // update counter
           pickup();
@@ -121,6 +126,7 @@ void loop() {
 
         else if (curVal == 5) {          // keypress 5 sim for twist func. 53
           Serial.print("status/twisting");
+          currentMode = "Twist";
           twist();
           delay(2000);
           Serial.print("status/idle");
@@ -128,6 +134,7 @@ void loop() {
 
         else if (curVal == 7) {          // keypress 7 for drop 55
           Serial.print("status/dropping");
+          currentMode = "Drop Off";
           delay(1000);
           Serial.print("bobbins/2");
           dropoff();
@@ -149,7 +156,11 @@ void loop() {
 
   // show info on lcd
   if (DisplayOn) {
-    writeData();
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis > 500){
+      writeData();
+      previousMillis = currentMillis;
+    }
   }
 
   //  Serial.println(digitalRead(FR_encoder));

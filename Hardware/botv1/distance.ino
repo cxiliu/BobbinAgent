@@ -67,16 +67,16 @@ void measureDistanceRight() {
 }
 
 void writeData() {
-  Serial.print(frontDistance);
-  Serial.print("  ");
-  Serial.print(leftDistance);
-  Serial.print("  ");
-  Serial.print(rightDistance);
-  Serial.println("  ");
-  lcd.setCursor(0, 0);
+//  Serial.print(frontDistance);
+//  Serial.print("  ");
+//  Serial.print(leftDistance);
+//  Serial.print("  ");
+//  Serial.print(rightDistance);
+//  Serial.println("  ");
+  lcd.setCursor(0, 1);
   String line1 = "F:" + String(frontDistance) + " R:" + String(rightDistance) + " L:" + String(leftDistance) + "   ";
   lcd.print(line1);
-  lcd.setCursor(0, 1);
-  lcd.print(currentMode + " " + currentDirection);
+  lcd.setCursor(0, 0);
+  lcd.print("Status: " + currentMode); // + " " + currentDirection);
 //  lcd.print(headingData);
 }
