@@ -73,6 +73,10 @@ String currentDirection = "stopped";
 bool lowerTriggered = false;
 bool upperTriggered = false;
 
+// GRAB BOOLS
+bool gripperInPosition = false;
+bool test = false;
+
 // left first, right second
 #define R_Gripper 6
 #define L_Gripper 7
@@ -166,13 +170,24 @@ int maxPwm = 120;
 String curString; // variable to store incoming serial data as String
 int curVal;
 int rotVal;
+int distVal;
+uint8_t buf[8] = { 
+  0 }; 
+char myChar;
 
 void setup() {
-  Serial.begin(9600);
-  // Serial.begin(115200);
+  //Serial.begin(9600);
+  Serial.begin(115200);
   //COMM TEST - initialize bobbin count to 0
   Serial.print("bobbins/0");
-  
+
+//  for (int i=0; i<360; i++){
+//    Serial.print(i);
+//    Serial.print("    ");
+//    long number = (i * 40 * 487.0) / (360 * 150.8);
+//    Serial.println(int(number));
+//  }
+//  
   pinMode(B_enA, OUTPUT);
   pinMode(B_in1, OUTPUT);
   pinMode(B_in2, OUTPUT);

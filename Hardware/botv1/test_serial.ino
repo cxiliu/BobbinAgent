@@ -5,10 +5,10 @@ void CommunicationIntegrationTest(int _receivedByte) {
     twist(); //t - twist
   }
   else if (_receivedByte == 112) {
-    pickup(); //p - pickup
+    pickupRight(); //p - pickup
   }
   else if (_receivedByte == 100) {
-    dropoff(); //d - dropoff
+    dropoffRight(); //d - dropoff
   }
   else if (_receivedByte == 108) {
     rotateDegree(90); //l - turn left 90

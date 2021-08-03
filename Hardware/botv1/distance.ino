@@ -1,29 +1,29 @@
-String measureHeading() {
-  if (accel.available()) {
-    // Acceleration of x, y, and z directions in g units
-    //    Serial.print(accel.getCalculatedX(), 3);
-    //    Serial.print("\t");
-    //    Serial.print(accel.getCalculatedY(), 3);
-    //    Serial.print("\t");
-    //    Serial.print(accel.getCalculatedZ(), 3);
-    //    Serial.println();
-    float x = (accel.getCalculatedX() - 0.008) * 1000;
-    float y = (accel.getCalculatedY() - 0.135) * 1000;
-    //    float angle = atan(y/x)/3.1415*180;
-    //    Serial.println(angle);
-    //    return (int)angle;
-    return "Heading: x" +  String(int(x)) + " y" + String(int(y)) + "     ";
-  }
-  else {
-    Serial.println("not avail");
-    return "no data";
-  }
-}
+//String measureHeading() {
+//  if (accel.available()) {
+//    // Acceleration of x, y, and z directions in g units
+//    //    Serial.print(accel.getCalculatedX(), 3);
+//    //    Serial.print("\t");
+//    //    Serial.print(accel.getCalculatedY(), 3);
+//    //    Serial.print("\t");
+//    //    Serial.print(accel.getCalculatedZ(), 3);
+//    //    Serial.println();
+//    float x = (accel.getCalculatedX() - 0.008) * 1000;
+//    float y = (accel.getCalculatedY() - 0.135) * 1000;
+//    //    float angle = atan(y/x)/3.1415*180;
+//    //    Serial.println(angle);
+//    //    return (int)angle;
+//    return "Heading: x" +  String(int(x)) + " y" + String(int(y)) + "     ";
+//  }
+//  else {
+//    Serial.println("not avail");
+//    return "no data";
+//  }
+//}
 
 void measureDistance(){
   measureDistanceFront();
-  measureDistanceLeft();
-  measureDistanceRight();
+  //measureDistanceLeft();
+  //measureDistanceRight();
 }
 
 void measureDistanceFront() {
@@ -34,9 +34,9 @@ void measureDistanceFront() {
   digitalWrite(F_TRIG, LOW);
   const unsigned long durationF = pulseIn(F_ECHO, HIGH);
   frontDistance = durationF / 29 / 2;
-  if (durationF == 0) {
-    Serial.println("Warning: no pulse from front sensor");
-  }
+//  if (durationF == 0) {
+//    Serial.println("Warning: no pulse from front sensor");
+//  }
 }
 
 void measureDistanceLeft() {
@@ -47,9 +47,9 @@ void measureDistanceLeft() {
   digitalWrite(L_TRIG, LOW);
   const unsigned long durationL = pulseIn(L_ECHO, HIGH);
   leftDistance = durationL / 29 / 2;
-  if (durationL == 0) {
-    Serial.println("Warning: no pulse from left sensor");
-  }
+//  if (durationL == 0) {
+//    Serial.println("Warning: no pulse from left sensor");
+//  }
 }
 
 void measureDistanceRight() {

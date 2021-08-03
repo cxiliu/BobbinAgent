@@ -32,12 +32,12 @@ void actuateLeftGripper(bool grippp) {
 bool LowerSwitchTriggered() {
   if (!digitalRead(R_LOW_POS)) {
     lowerTriggered = true;
-    Serial.println("right low switch triggered");
+    //Serial.println("right low switch triggered");
     return lowerTriggered;
   }
   if (!digitalRead(L_LOW_POS)) {
     lowerTriggered = true;
-    Serial.println("left low switch triggered");
+    //Serial.println("left low switch triggered");
     return lowerTriggered;
   }
   lowerTriggered = false;
@@ -115,13 +115,13 @@ void runGripperCycle() {
   if (leftGripperClosed) {
     if (rightGripperClosed) {
       //3: full -> right only
-      Serial.println("open left");
+      //Serial.println("open left");
       currentMode = "openL";
       actuateLeftGripper(false);
       leftGripperClosed = false;
     } else {
       // 2: left only -> full
-      Serial.println("grip right");
+      //Serial.println("grip right");
       currentMode = "gripR";
       actuateRightGripper(true);
       rightGripperClosed = true;
@@ -129,13 +129,13 @@ void runGripperCycle() {
   } else {
     if (rightGripperClosed) {
       //4: right only -> empty
-      Serial.println("open right");
+      //Serial.println("open right");
       currentMode = "openR";
       actuateRightGripper(false);
       rightGripperClosed = false;
     } else {
       //1: empty -> left only
-      Serial.println("grip left");
+      //Serial.println("grip left");
       currentMode = "gripL";
       actuateLeftGripper(true);
       leftGripperClosed = true;
