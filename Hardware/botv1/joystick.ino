@@ -13,24 +13,30 @@ void SetMotors(int command) {
     Stop();
   }
   else if ((command == 8) || (command == 7) || (command == 9)) {
+    StartLocomotion();
     GoForward45(10);
   }
   else if ((command == 3) || (command == 2) || (command == 1)) {
+    StartLocomotion();
     GoBackward45(10);
   }
   else if (command == 4) {
     if (leftGripperClosed && rightGripperClosed) {
+      StartLocomotion();
       TurnLeft45(90);
     }
     else {
+      StartLocomotion();
       GoLeft45(10); // parallel movement
     }
   }
   else if (command == 6) {
     if (leftGripperClosed && rightGripperClosed) {
+      StartLocomotion();
       TurnRight45(90);
     }
     else {
+      StartLocomotion();
       GoRight45(10); // parallel movement
     }
   }

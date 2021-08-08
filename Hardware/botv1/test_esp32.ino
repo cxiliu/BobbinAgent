@@ -1,7 +1,7 @@
 
 // turn 360 degrees
 void twist() {
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   TurnLeft45(360);
   LoopPID();
   return;
@@ -12,7 +12,7 @@ void twist() {
 // ============================
 // after approach bobbin from front, rotate to align gripper
 void alignRightGripper(int degree){
-    LOCOMOTION_ACTIVE = true;
+    StartLocomotion();
     TurnLeft45(85 + degree);
     LoopPID();
     return;
@@ -20,7 +20,7 @@ void alignRightGripper(int degree){
 
 // after turning to align with gripper, move closer to the bobbin
 void approachRightGripper(){
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   GoRight45(5);
   LoopPID();
   return;
@@ -44,7 +44,7 @@ void dropoffRight() {
 // ============================
 // after approach bobbin from front, rotate to align gripper
 void alignLeftGripper(int degree){
-    LOCOMOTION_ACTIVE = true;
+    StartLocomotion();
     TurnRight45(90 + abs(degree));
     LoopPID();
     return;
@@ -52,7 +52,7 @@ void alignLeftGripper(int degree){
 
 // after turning to align with gripper, move closer to the bobbin
 void approachLeftGripper(int dist){
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   GoLeft45(7);
   LoopPID();
   return;
@@ -77,13 +77,13 @@ void dropoffLeft() {
 // turn defined degrees and stop
 void rotateDegree(int degree) {
   if (degree > 0) {
-    LOCOMOTION_ACTIVE = true;
+    StartLocomotion();
     TurnLeft45(degree);
     LoopPID();
     return;
   }
   else {
-    LOCOMOTION_ACTIVE = true;
+    StartLocomotion();
     TurnRight45(-degree);
     LoopPID();
     return;
@@ -92,7 +92,7 @@ void rotateDegree(int degree) {
 
 // move forward in centimeters
 void moveForwardDistance(int distance) {
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   GoForward45(distance);
   LoopPID();
   return;
@@ -100,7 +100,7 @@ void moveForwardDistance(int distance) {
 
 // move left in centimeters
 void moveLeftDistance(int distance) {
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   GoLeft45(distance);
   LoopPID();
   return;
@@ -108,7 +108,7 @@ void moveLeftDistance(int distance) {
 
 // move right in centimeters
 void moveRightDistance(int distance) {
-  LOCOMOTION_ACTIVE = true;
+  StartLocomotion();
   GoRight45(distance);
   LoopPID();
   return;

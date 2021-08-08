@@ -2,20 +2,28 @@
 // RIGHT - RIGHT BACK WHEEL - LEFT CHIP IN3IN4
 // LEFT - LEFT FRONT WHEEL - RIGHT CHIP IN1IN2 (in1 CC)
 // FRONT - RIGHT FRONT WHEEL - RIGHT CHIP IN3IN4 (in1 C)
-
 //BL and BR is flipped in the motor signals
 
-
 // ******* distance specified in CM ******* //
+// ENCODER WHEEL HAS 20 SLOTS
+const float SLOT_COUNT = 20.0; //40.0
 
-float distanceToSignals(int distance){
-  float scale = 2.82; // somewhat arbitrary ratio
-  return int(40.0 / scale * 10 * distance * sqrt(2) / 150.8);
+float distanceToSignals(int distance) {
+  float scale = 2.0; // somewhat arbitrary ratio
+  int steps = int(SLOT_COUNT / scale * 10 * distance * sqrt(2) / 150.8);
+  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
+    Serial.print("distance "); Serial.print(distance); Serial.print(" signal "); Serial.println(steps);
+  }
+  return steps;
 }
 
-float degreeToSignals(int degree){
+float degreeToSignals(int degree) {
   float scale = 2.0; // somewhat arbitrary ratio
-  return int(40.0 / scale * (487.0 * degree / 360.0) / 150.8);
+  int steps = int(SLOT_COUNT / scale * (487.0 * degree / 360.0) / 150.8);
+  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
+    Serial.print("angle "); Serial.print(degree); Serial.print(" signal "); Serial.println(steps);
+  }
+  return steps;
 }
 
 void GoForward45(int distance) {
@@ -110,14 +118,14 @@ void TurnRight45(int degree) {
 
 void TurnLeft45(int degree) {
   SetpointFL = degreeToSignals(degree);
-  
-//  Serial.print("rotate left ");
-//  Serial.print(degree);
-//  Serial.print("  signal ");
-//  Serial.println(int(40 * (487 * degree / 360.f) / 150.8));
-//  Serial.print("  assigned ");
-//  Serial.println(SetpointFL);
-  
+
+  //  Serial.print("rotate left ");
+  //  Serial.print(degree);
+  //  Serial.print("  signal ");
+  //  Serial.println(int(40 * (487 * degree / 360.f) / 150.8));
+  //  Serial.print("  assigned ");
+  //  Serial.println(SetpointFL);
+
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -132,7 +140,7 @@ void TurnLeft45(int degree) {
   SetBLWheel(true, BL_direction);
   SetBRWheel(true, BR_direction);
   currentDirection = "turn left";
-  
+
 }
 
 void Stop() {
@@ -231,55 +239,56 @@ void SetInitialMotorTargets() {
 // ENCODER INTERRUPT CALLBACKS
 
 void FR_callback() {
-  elapsedTimeFR = millis() - previousTimeFR;
-  if (elapsedTimeFR >= MIN_ELAPSED_TIME)
-  {
-    previousTimeFR = millis();
-    
-    FR_count += FR_reversed ? -1 : 1;
-  } else {
-    filterActiveCountFR += 1;
-    filterSignalSpeedFR = (elapsedTimeFR + filterSignalSpeedFR) / 2.0;
-  }
+  //  elapsedTimeFR = millis() - previousTimeFR;
+  //  if (elapsedTimeFR >= MIN_ELAPSED_TIME)
+  //  {
+  //    previousTimeFR = millis();
+
+  FR_count += FR_reversed ? -1 : 1;
+  //  }
+  //  else {
+  //    filterActiveCountFR += 1;
+  //    filterSignalSpeedFR = (elapsedTimeFR + filterSignalSpeedFR) / 2.0;
+  //  }
 }
 
 void FL_callback() {
-  elapsedTimeFL = millis() - previousTimeFL;
-  if (elapsedTimeFL >= MIN_ELAPSED_TIME)
-  {
-    previousTimeFL = millis();
-    FL_count += FL_reversed ? -1 : 1;
-  }
-  else {
-    filterActiveCountFL += 1;
-    filterSignalSpeedFL = (elapsedTimeFL + filterSignalSpeedFL) / 2.0;
-  }
+  //  elapsedTimeFL = millis() - previousTimeFL;
+  //  if (elapsedTimeFL >= MIN_ELAPSED_TIME)
+  //  {
+  //    previousTimeFL = millis();
+  FL_count += FL_reversed ? -1 : 1;
+  //  }
+  //  else {
+  //    filterActiveCountFL += 1;
+  //    filterSignalSpeedFL = (elapsedTimeFL + filterSignalSpeedFL) / 2.0;
+  //  }
 }
 
 void BR_callback() {
-  elapsedTimeBR = millis() - previousTimeBR;
-  if (elapsedTimeBR >= MIN_ELAPSED_TIME)
-  {
-    previousTimeBR = millis();
-    BR_count += BR_reversed ? -1 : 1;
-  }
-  else {
-    filterActiveCountBR += 1;
-    filterSignalSpeedBR = (elapsedTimeBR + filterSignalSpeedBR) / 2.0;
-  }
+  //  elapsedTimeBR = millis() - previousTimeBR;
+  //  if (elapsedTimeBR >= MIN_ELAPSED_TIME)
+  //  {
+  //    previousTimeBR = millis();
+  BR_count += BR_reversed ? -1 : 1;
+  //  }
+  //  else {
+  //    filterActiveCountBR += 1;
+  //    filterSignalSpeedBR = (elapsedTimeBR + filterSignalSpeedBR) / 2.0;
+  //  }
 }
 
 void BL_callback() {
-  elapsedTimeBL = millis() - previousTimeBL;
-  if (elapsedTimeBL >= MIN_ELAPSED_TIME)
-  {
-    previousTimeBL = millis();
-    BL_count += BL_reversed ? -1 : 1;
-  }
-  else {
-    filterActiveCountBL += 1;
-    filterSignalSpeedBL = (elapsedTimeBL + filterSignalSpeedBL) / 2.0;
-  }
+  //  elapsedTimeBL = millis() - previousTimeBL;
+  //  if (elapsedTimeBL >= MIN_ELAPSED_TIME)
+  //  {
+  //    previousTimeBL = millis();
+  BL_count += BL_reversed ? -1 : 1;
+  //  }
+  //  else {
+  //    filterActiveCountBL += 1;
+  //    filterSignalSpeedBL = (elapsedTimeBL + filterSignalSpeedBL) / 2.0;
+  //  }
 }
 
 // ENCODER HELPER FUNCTIONS
@@ -289,20 +298,25 @@ void ResetEncoders() {
   FL_count = 0;
   BR_count = 0;
   BL_count = 0;
-  filterActiveCountFR = 0;
-  filterActiveCountFL = 0;
-  filterActiveCountBR = 0;
-  filterActiveCountBL = 0;
-  filterSignalSpeedFR = 0;
-  filterSignalSpeedFL = 0;
-  filterSignalSpeedBR = 0;
-  filterSignalSpeedBL = 0;
+  FR_reached = false;
+  FL_reached = false;
+  BR_reached = false;
+  BL_reached = false;
+  //  filterActiveCountFR = 0;
+  //  filterActiveCountFL = 0;
+  //  filterActiveCountBR = 0;
+  //  filterActiveCountBL = 0;
+  //  filterSignalSpeedFR = 0;
+  //  filterSignalSpeedFL = 0;
+  //  filterSignalSpeedBR = 0;
+  //  filterSignalSpeedBL = 0;
 }
 
 void PrintEncoderInfo(String prefix) {
   // http://androminarobot-english.blogspot.com/2017/03/encoder-and-arduinotutorial-about-ir.html
   // 562J 250v
   if (false) {
+    // print end state
     Serial.print(digitalRead(FR_encoder));
     Serial.print(" ");
     Serial.print(digitalRead(FL_encoder));
@@ -312,6 +326,7 @@ void PrintEncoderInfo(String prefix) {
     Serial.println(digitalRead(BL_encoder));
   }
   else {
+    // print completed revolutions
     Serial.print(prefix + ":  ");
     Serial.print(FR_count);
     Serial.print("  ");

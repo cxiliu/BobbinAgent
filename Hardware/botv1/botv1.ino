@@ -19,31 +19,32 @@ bool COMMUNICATION_ENABLED = false;
 #define R_enA 5//3//9
 #define R_in1 43//6
 #define R_in2 45//7
-#define L_enA 2//4//9
+#define L_enA 9//4//9
 #define L_in1 47//6
 #define L_in2 49//7
-#define F_enA 3//5//9
+#define F_enA 10//5//9
 #define F_in1 51//6
 #define F_in2 53//7
 
 // wheel encoders
 #define FR_encoder 18
 #define FL_encoder 19
-#define BL_encoder 20
-#define BR_encoder 21
+#define BL_encoder 2
+#define BR_encoder 3
 volatile int FR_count = 0;
 volatile int FL_count = 0;
 volatile int BL_count = 0;
 volatile int BR_count = 0;
 
-// motor speed
+// motor speed (adjusted by PID loop)
 //FR-F, FL-L, BR-R, BL-B
 bool disableMotors = false;
-// motor 6V, input power 12V, L298N drop 2V, 255 x 60% = 150 max
-int F_motorSpeed = 98;//0-255, FR
-int L_motorSpeed = 92;//0-255, FL
-int R_motorSpeed = 100;//0-255, BR
-int B_motorSpeed = 112;//0-255, BL
+// motor max 6V, max input 10V (input power 12V, L298N drop 2V)
+// 255 x 60% = 150 max
+int F_motorSpeed = 100;//98, 0-255, FR
+int L_motorSpeed = 100;//92, 0-255, FL
+int R_motorSpeed = 100;//100, 0-255, BR
+int B_motorSpeed = 100;//112, 0-255, BL
 
 // eyes
 #define L_TRIG 22
@@ -58,7 +59,6 @@ const int PICKING_DISTANCE = 5; //cm
 int leftDistance = 0;
 int rightDistance = 0;
 int frontDistance = 0;
-int stuckCounter = 0;
 int lastFrontDistance = 0;
 String currentDirection = "stopped";
 
@@ -86,15 +86,12 @@ bool rightGripperClosed = false;
 bool leftGripperClosed = false;
 const int OPEN_DEG = 5;//-30;
 const int CLOSE_DEG = 80;//100//110
-bool defaultOpen = true;
-
-int counter;
-int turn90Count = 60;
+const bool GRIPPER_DEFAULT_OPEN = true;
 int incomingByte = 0; // for incoming serial data
 
 //IMU
+const bool IMU_ACTIVE = false;
 MMA8452Q accel;
-String headingData;
 
 // joystick
 //bool autoMode = true;
@@ -116,45 +113,50 @@ String DirName;
 const int rs = 36, en = 38, d4 = 40, d5 = 42, d6 = 44, d7 = 46;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-// encoded pulse lengths for specific moves
+// encoded pulse lengths for specific moves (deprecated)
 const int TINY_STEP = 50;
 const int SMALL_STEP = 200;
-const int LARGE_STEP = 250;
 const int TURN_90_STEP = 300;
-bool LOCOMOTION_ACTIVE = false;
 
-// ENCODER FILTERS
-// 40 FIRINGS PER REVOLUTION
-const int MIN_ELAPSED_TIME = 20;//30;
-volatile unsigned long elapsedTimeFR;
-volatile unsigned long previousTimeFR;
-volatile unsigned long elapsedTimeFL;
-volatile unsigned long previousTimeFL;
-volatile unsigned long elapsedTimeBR;
-volatile unsigned long previousTimeBR;
-volatile unsigned long elapsedTimeBL;
-volatile unsigned long previousTimeBL;
-volatile int filterActiveCountFR;
-volatile int filterActiveCountFL;
-volatile int filterActiveCountBR;
-volatile int filterActiveCountBL;
-volatile unsigned long filterSignalSpeedFR = 0.0;
-volatile unsigned long filterSignalSpeedFL = 0.0;
-volatile unsigned long filterSignalSpeedBR = 0.0;
-volatile unsigned long filterSignalSpeedBL = 0.0;
+// ENCODER FILTERS (not necessary)
+//const int MIN_ELAPSED_TIME = 1;//30;
+//volatile unsigned long elapsedTimeFR;
+//volatile unsigned long previousTimeFR;
+//volatile unsigned long elapsedTimeFL;
+//volatile unsigned long previousTimeFL;
+//volatile unsigned long elapsedTimeBR;
+//volatile unsigned long previousTimeBR;
+//volatile unsigned long elapsedTimeBL;
+//volatile unsigned long previousTimeBL;
+//volatile int filterActiveCountFR;
+//volatile int filterActiveCountFL;
+//volatile int filterActiveCountBR;
+//volatile int filterActiveCountBL;
+//volatile unsigned long filterSignalSpeedFR = 0.0;
+//volatile unsigned long filterSignalSpeedFL = 0.0;
+//volatile unsigned long filterSignalSpeedBR = 0.0;
+//volatile unsigned long filterSignalSpeedBL = 0.0;
 
 // WHEEL PID
-//double Kp=30.00, Ki=0.00, Kd=00.00;
-double Kp=30.00, Ki=0.50, Kd=0.10;
+bool LOCOMOTION_ACTIVE = false;
+unsigned long now; // debug variable
+// https://www.youtube.com/watch?v=IB1Ir4oCP5k&ab_channel=RealPars
+// https://playground.arduino.cc/Code/PIDLibrary/
+double Kp_agg = 8.0, Ki_agg = 0.2, Kd_agg = 0.0;
+double Kp_con = 1.0, Ki_con = 0.05, Kd_con = 0.0;
+// Kp = 1.0, reaches and oscillates a lot
+// Kp = 0.1, turn negative
+//double Kp=30.00, Ki=0.0, Kd=0.0;
+//double Kp=30.00, Ki=0.50, Kd=0.10;
 //double Kp=30.00, Ki=200.00, Kd=00.00;
 double SetpointFR, InputFR, OutputFR;
-PID pidFR(&InputFR, &OutputFR, &SetpointFR, Kp, Ki, Kd, DIRECT);
+PID pidFR(&InputFR, &OutputFR, &SetpointFR, Kp_agg, Ki_agg, Kd_agg, DIRECT);
 double SetpointFL, InputFL, OutputFL;
-PID pidFL(&InputFL, &OutputFL, &SetpointFL, Kp, Ki, Kd, DIRECT);
+PID pidFL(&InputFL, &OutputFL, &SetpointFL, Kp_agg, Ki_agg, Kd_agg, DIRECT);
 double SetpointBR, InputBR, OutputBR;
-PID pidBR(&InputBR, &OutputBR, &SetpointBR, Kp, Ki, Kd, DIRECT);
+PID pidBR(&InputBR, &OutputBR, &SetpointBR, Kp_agg, Ki_agg, Kd_agg, DIRECT);
 double SetpointBL, InputBL, OutputBL;
-PID pidBL(&InputBL, &OutputBL, &SetpointBL, Kp, Ki, Kd, DIRECT);
+PID pidBL(&InputBL, &OutputBL, &SetpointBL, Kp_agg, Ki_agg, Kd_agg, DIRECT);
 bool FR_direction = true, FL_direction = true, BR_direction = true, BL_direction = true;
 bool FR_reached = true, FL_reached = true, BR_reached = true, BL_reached = true;
 bool FR_reversed = false, FL_reversed  = false, BR_reversed  = false, BL_reversed  = false;
@@ -163,31 +165,32 @@ int badCounter = 0;
 unsigned long previousMicros;
 unsigned long previousMillis;
 int motorUpdateTime = 0;
-int minPwm = 60;
-int maxPwm = 120;
+int minPwm = 75; // tested minimum before motor stalls: 75
+int maxPwm = 120; //measured voltage equivalent: 4.46 V
 
 //COMM TEST - variables
 String curString; // variable to store incoming serial data as String
 int curVal;
 int rotVal;
 int distVal;
-uint8_t buf[8] = { 
-  0 }; 
+uint8_t buf[8] = {
+  0
+};
 char myChar;
 
 void setup() {
-  //Serial.begin(9600);
-  Serial.begin(115200);
+  Serial.begin(9600);
+  //  Serial.begin(115200);
   //COMM TEST - initialize bobbin count to 0
-  Serial.print("bobbins/0");
+  //  Serial.print("bobbins/0");
 
-//  for (int i=0; i<360; i++){
-//    Serial.print(i);
-//    Serial.print("    ");
-//    long number = (i * 40 * 487.0) / (360 * 150.8);
-//    Serial.println(int(number));
-//  }
-//  
+  //  for (int i=0; i<360; i++){
+  //    Serial.print(i);
+  //    Serial.print("    ");
+  //    long number = (i * 40 * 487.0) / (360 * 150.8);
+  //    Serial.println(int(number));
+  //  }
+  //
   pinMode(B_enA, OUTPUT);
   pinMode(B_in1, OUTPUT);
   pinMode(B_in2, OUTPUT);
@@ -209,10 +212,11 @@ void setup() {
   pinMode(FL_encoder, INPUT);
   pinMode(BR_encoder, INPUT);
   pinMode(BL_encoder, INPUT);
-  attachInterrupt(digitalPinToInterrupt(FR_encoder), FR_callback, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(FL_encoder), FL_callback, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(BR_encoder), BR_callback, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(BL_encoder), BL_callback, CHANGE);
+  // use RISING instead of CHANGE, the dc spins a bit too fast for this to detect correctly
+  attachInterrupt(digitalPinToInterrupt(FR_encoder), FR_callback, RISING);
+  attachInterrupt(digitalPinToInterrupt(FL_encoder), FL_callback, RISING);
+  attachInterrupt(digitalPinToInterrupt(BR_encoder), BR_callback, RISING);
+  attachInterrupt(digitalPinToInterrupt(BL_encoder), BL_callback, RISING);
   // stepper and stop switches
   pinMode(L_LOW_POS, INPUT_PULLUP);
   pinMode(R_LOW_POS, INPUT_PULLUP);
@@ -228,19 +232,18 @@ void setup() {
   pinMode(L_TRIG, OUTPUT);
   pinMode(R_ECHO, INPUT);
   pinMode(R_TRIG, OUTPUT);
-  Wire.begin();
-  //if (accel.begin() == false) {
-    //Serial.println("Compass not Connected");
-  //}
+  
+  if (IMU_ACTIVE) {
+    Wire.begin(); //initiate the Wire library and join the I2C bus as master, occupies pin 20/21 on Arduino mega
+    if (accel.begin() == false) {
+      Serial.println("Compass not Connected");
+    }
+  }
 
-  //  Wire.begin();
-  //  if (accel.begin() == false) {
-  //    Serial.println("Compass not Connected");
-  //  }
   pinMode(STALL_DETECTION, INPUT);
   rightGripper.attach(R_Gripper);
   leftGripper.attach(L_Gripper);
-  if (defaultOpen) {
+  if (GRIPPER_DEFAULT_OPEN) {
     rightGripper.write(180 - OPEN_DEG);
     leftGripper.write(OPEN_DEG);
   } else {
@@ -256,7 +259,7 @@ void setup() {
   analogWrite(contrast, 128);
   lcd.print("");
   lcd.setCursor(0, 1);
-  lcd.print("F: 0 R: 0 L: 0");  
+  lcd.print("F: 0 R: 0 L: 0");
 
   randomSeed(analogRead(0));
   //  delay(200);

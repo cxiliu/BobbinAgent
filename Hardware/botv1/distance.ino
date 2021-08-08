@@ -78,5 +78,4 @@ void writeData() {
   lcd.print(line1);
   lcd.setCursor(0, 0);
   lcd.print("Status: " + currentMode); // + " " + currentDirection);
-//  lcd.print(headingData);
 }
