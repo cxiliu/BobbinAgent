@@ -9,7 +9,7 @@
 const float SLOT_COUNT = 20.0; //40.0
 
 float distanceToSignals(int distance) {
-  float scale = 2.0; // somewhat arbitrary ratio
+  float scale = 0.5; //2.0// somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * 10 * distance * sqrt(2) / 150.8);
   if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
     Serial.print("distance "); Serial.print(distance); Serial.print(" signal "); Serial.println(steps);
@@ -18,7 +18,7 @@ float distanceToSignals(int distance) {
 }
 
 float degreeToSignals(int degree) {
-  float scale = 2.0; // somewhat arbitrary ratio
+  float scale = 1.0; // somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * (487.0 * degree / 360.0) / 150.8);
   if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
     Serial.print("angle "); Serial.print(degree); Serial.print(" signal "); Serial.println(steps);

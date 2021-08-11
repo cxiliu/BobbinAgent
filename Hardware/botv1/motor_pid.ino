@@ -1,7 +1,7 @@
 bool PID_DEBUG_VEL = false; // setting this to true affects loop performance
-bool PID_DEBUG_POS = true; // setting this to true affects loop performance
+bool PID_DEBUG_POS = false; // setting this to true affects loop performance
 int STEP_TOLERANCE = 1;
-const int AGG_TOLERANCE = 5;
+const int AGG_TOLERANCE = 1; //5
 const int FORCE_STOP_COUNT = 200;
 
 // sub loop used during locomotion

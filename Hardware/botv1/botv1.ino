@@ -4,9 +4,9 @@
 #include "SparkFun_MMA8452Q.h"
 #include <LiquidCrystal.h>
 
-bool DistanceOn = true;
+bool DistanceOn = false;
 bool DisplayOn = true;
-bool COMMUNICATION_ENABLED = false;
+//bool COMMUNICATION_ENABLED = false;
 
 // wheels
 // BACK - LEFT BACK WHEEL - LEFT CHIP IN1IN2 (in1 CC)
@@ -87,7 +87,7 @@ bool leftGripperClosed = false;
 const int OPEN_DEG = 5;//-30;
 const int CLOSE_DEG = 80;//100//110
 const bool GRIPPER_DEFAULT_OPEN = true;
-int incomingByte = 0; // for incoming serial data
+char incomingByte; // for incoming serial data
 
 //IMU
 const bool IMU_ACTIVE = false;
@@ -179,10 +179,10 @@ uint8_t buf[8] = {
 char myChar;
 
 void setup() {
-  Serial.begin(9600);
-  //  Serial.begin(115200);
+//  Serial.begin(9600);
+    Serial.begin(115200);
   //COMM TEST - initialize bobbin count to 0
-  //  Serial.print("bobbins/0");
+//    Serial.print("bobbins/0");
 
   //  for (int i=0; i<360; i++){
   //    Serial.print(i);

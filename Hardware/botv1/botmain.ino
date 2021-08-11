@@ -9,13 +9,8 @@ void loop() {
 
   // COMMUNICATION
   if (Serial.available() > 0) {
-    incomingByte = Serial.read();
-    LocomotionTest(incomingByte);
-    //CommunicationIntegrationTest(incomingByte);
-
-    /* START OF MAIN COMMUNICATION CODE
           curString = Serial.readStringUntil('\n'); //process incoming byte as a string
-
+          Serial.println(curString);
           //check if rot in string. then value is for rotation command
           if (curString.indexOf("rot") >= 0) {
             curString = curString.substring(4);
@@ -27,7 +22,11 @@ void loop() {
             curString = curString.substring(4);
             distVal = curString.toInt();
           }
-
+          else if (curString == "w" || curString == "s" || curString == "z" || curString == "a" 
+            || curString == "d" || curString == "q" || curString == "e"){
+            incomingByte = curString.charAt(0);
+            LocomotionTest(incomingByte);
+          }
           //else it is a normal bot instruction
           else {
             //Serial.print(curString);
@@ -155,7 +154,6 @@ void loop() {
               moveForwardDistance(5);
             }
           }
-      END OF MAIN COMMUNICATION CODE */
   }
 
 
