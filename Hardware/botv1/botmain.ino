@@ -19,7 +19,7 @@ void loop() {
 
           //check if dist in string. then value is for moveForward command
           else if (curString.indexOf("dist") >= 0) {
-            curString = curString.substring(4);
+            curString = curString.substring(5);
             distVal = curString.toInt();
           }
           else if (curString == "w" || curString == "s" || curString == "z" || curString == "a" 
@@ -77,11 +77,11 @@ void loop() {
 
             }
 
-            else if (curVal == 8) {          // keypress 3 sim for move adaptive distance func.
+            else if (curVal == 8) {          // keypress 8 move forward preset.
               delay(1000);
               Serial.print("status/approaching");
               //Serial.print("status/approaching " + String(distVal) + "cm");
-              moveForwardDistance(15);
+              moveForwardDistance(10);
             }
 
             // RIGHT GRIPPER GRAB
@@ -149,9 +149,11 @@ void loop() {
               Serial.print("status/idle");
             }
 
-            else if (curVal == 3) {          // keypress 3 for approach preset distance 51
-              Serial.print("status/approaching");
-              moveForwardDistance(5);
+            else if (curVal == 3) {          // keypress 3 for approach adaptive
+              //Serial.print("status/approaching");
+              Serial.print("status/approaching " + String(distVal) + "cm");
+              moveForwardDistance(distVal);
+              delay(1000);
             }
           }
   }
