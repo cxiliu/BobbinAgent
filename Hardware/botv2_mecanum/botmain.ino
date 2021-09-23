@@ -99,6 +99,7 @@ void loop() {
         Serial.print("status/approaching");
         //Serial.print("status/approaching " + String(distVal) + "cm");
         moveForwardDistance(10);
+        Serial.print("status/idle");
       }
 
       // RIGHT GRIPPER GRAB
@@ -169,8 +170,9 @@ void loop() {
       else if (curVal == 3) {          // keypress 3 for approach preset distance 51
         // Serial.print("status/approaching");
         Serial.print("status/approaching " + String(distVal) + "cm");
-        moveForwardDistance(5);
+        moveForwardDistance(distVal);
         delay(1000);
+        Serial.print("status/idle");
       }
 
       else if (curVal == 15) {
