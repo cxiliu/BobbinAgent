@@ -3,7 +3,7 @@ bool PID_DEBUG_POS = true; // setting this to true affects loop performance
 int STEP_TOLERANCE = 1;
 //const int AGG_TOLERANCE = 1;
 const int APPROACH_TOLERANCE = 4;
-const int FORCE_STOP_COUNT = 20;//200
+const int FORCE_STOP_COUNT = 10;//200
 
 // sub loop used during locomotion
 void LoopPID() {
@@ -56,7 +56,7 @@ void MotorPID() {
     if (badCounter >= FORCE_STOP_COUNT) {
       EndLoop(true);
       return;
-    } else if (badCounter >= 10){
+    } else if (badCounter >= 5){
       STEP_TOLERANCE = 1;
     } 
 

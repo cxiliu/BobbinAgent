@@ -125,14 +125,24 @@ void moveRightDistance(int distance) {
 
 void Cross1(){
   moveBackwardDistance(10);
-  moveRightDistance(25);
+  delay(500);
+  moveRightDistance(10);
+  delay(200);
+  moveRightDistance(10);
+  delay(500);
   moveForwardDistance(10);
+  delay(500);
   rotateDegree(-180);
 }
 
 void Cross2(){
   moveForwardDistance(10);
-  moveLeftDistance(25);
+  delay(500);
+  moveLeftDistance(10);
+  delay(200);
+  moveLeftDistance(10);
+  delay(500);
   moveBackwardDistance(10);
+  delay(500);
   rotateDegree(-180);
 }
