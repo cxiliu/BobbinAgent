@@ -107,7 +107,8 @@ void loop() {
         currentMode = "GrabR";
         Serial.print("status/grabbingRIGHT");
         delay(1000);
-        alignRightGripper(rotVal);
+        rotateDegree(90);
+        //alignRightGripper(rotVal);
         delay(2000);
 
         approachRightGripper();
@@ -124,7 +125,8 @@ void loop() {
         currentMode = "GrabL";
         Serial.print("status/grabbingLEFT");
         delay(1000);
-        alignLeftGripper(rotVal);
+        rotateDegree(-90);
+        //alignLeftGripper(rotVal);
         delay(2000);
 
         approachLeftGripper(frontDistance);
