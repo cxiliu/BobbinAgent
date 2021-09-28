@@ -22,28 +22,61 @@ void loop() {
       curString = curString.substring(5);
       distVal = curString.toInt();
     }
-    else if (curString == "w" || curString == "s" || curString == "z" || curString == "a"
-             || curString == "d" || curString == "q" || curString == "e"
-             || curString == "x" || curString == "c" || curString == "h" || curString == "i" || curString == "g" || curString == "u") {
-      incomingByte = curString.charAt(0);
-      LocomotionTest(incomingByte);
-    }
-    else if (curString.indexOf("c1") >= 0) {
-      Cross1();
-    }
-    else if (curString.indexOf("c2") >= 0) {
-      Cross2();
-    }
-    else if (curString.indexOf("setd") >= 0 ) {
+
+    //check if bug in string. then value is for debug cmds
+    else if (curString.indexOf("bug") >= 0) {
       curString = curString.substring(4);
-      SET_DISTANCE = curString.toInt();
-      Serial.println("distance set to " + curString);
+
+      if (curString.indexOf("w") == 0 || curString.indexOf("s") == 0 || curString.indexOf("z") == 0 || curString.indexOf("a") == 0
+               || curString.indexOf("d") == 0 || curString.indexOf("q") == 0 || curString.indexOf("e") == 0
+               || curString.indexOf("x") == 0 || curString.indexOf("c") == 0 || curString.indexOf("h") == 0
+               || curString.indexOf("i") == 0 || curString.indexOf("g") == 0 || curString.indexOf("u") == 0) {
+        incomingByte = curString.charAt(0);
+        LocomotionTest(incomingByte);
+      }
+      else if (curString.indexOf("_c1") >= 0) {
+        Cross1();
+      }
+      else if (curString.indexOf("_c2") >= 0) {
+        Cross2();
+      }
+      else if (curString.indexOf("_setd") >= 0 ) {
+        curString = curString.substring(4);
+        SET_DISTANCE = curString.toInt();
+        Serial.println("distance set to " + curString);
+      }
+      else if (curString.indexOf("_seta") >= 0 ) {
+        curString = curString.substring(4);
+        SET_ANGLE = curString.toInt();
+        Serial.println("angle set to " + curString);
+      }
+      
     }
-    else if (curString.indexOf("seta") >= 0 ) {
-      curString = curString.substring(4);
-      SET_ANGLE = curString.toInt();
-      Serial.println("angle set to " + curString);
-    }
+    
+//    else if (curString == "w" || curString == "s" || curString == "z" || curString == "a"
+//             || curString == "d" || curString == "q" || curString == "e"
+//             || curString == "x" || curString == "c" || curString == "h" || curString == "i" || curString == "g" || curString == "u") {
+//      incomingByte = curString.charAt(0);
+//      LocomotionTest(incomingByte);
+//    }
+//    else if (curString.indexOf("c1") >= 0) {
+//      Cross1();
+//    }
+//    else if (curString.indexOf("c2") >= 0) {
+//      Cross2();
+//    }
+//    else if (curString.indexOf("setd") >= 0 ) {
+//      curString = curString.substring(4);
+//      SET_DISTANCE = curString.toInt();
+//      Serial.println("distance set to " + curString);
+//    }
+//    else if (curString.indexOf("seta") >= 0 ) {
+//      curString = curString.substring(4);
+//      SET_ANGLE = curString.toInt();
+//      Serial.println("angle set to " + curString);
+//    }
+
+    
     //else it is a normal bot instruction
     else {
       //Serial.print(curString);
