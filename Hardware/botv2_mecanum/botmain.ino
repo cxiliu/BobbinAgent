@@ -57,6 +57,31 @@ void loop() {
         LocomotionTest(incomingByte);
       }
     }
+    
+//    else if (curString == "w" || curString == "s" || curString == "z" || curString == "a"
+//             || curString == "d" || curString == "q" || curString == "e"
+//             || curString == "x" || curString == "c" || curString == "h" || curString == "i" || curString == "g" || curString == "u") {
+//      incomingByte = curString.charAt(0);
+//      LocomotionTest(incomingByte);
+//    }
+//    else if (curString.indexOf("c1") >= 0) {
+//      Cross1();
+//    }
+//    else if (curString.indexOf("c2") >= 0) {
+//      Cross2();
+//    }
+//    else if (curString.indexOf("setd") >= 0 ) {
+//      curString = curString.substring(4);
+//      SET_DISTANCE = curString.toInt();
+//      Serial.println("distance set to " + curString);
+//    }
+//    else if (curString.indexOf("seta") >= 0 ) {
+//      curString = curString.substring(4);
+//      SET_ANGLE = curString.toInt();
+//      Serial.println("angle set to " + curString);
+//    }
+
+    
     //else it is a normal bot instruction
     else {
       //Serial.print(curString);
@@ -110,6 +135,7 @@ void loop() {
         Serial.print("status/approaching");
         //Serial.print("status/approaching " + String(distVal) + "cm");
         moveForwardDistance(10);
+        Serial.print("status/idle");
       }
 
       // RIGHT GRIPPER GRAB
@@ -118,7 +144,8 @@ void loop() {
         Serial.print("status/grabbingRIGHT");
         //pickupRightAdaptive();
         delay(1000);
-        alignRightGripper(rotVal);
+        rotateDegree(90);
+        //alignRightGripper(rotVal);
         delay(2000);
 
         approachRightGripper();
@@ -136,7 +163,8 @@ void loop() {
         Serial.print("status/grabbingLEFT");
         //pickupLeftAdaptive();
         delay(1000);
-        alignLeftGripper(rotVal);
+        rotateDegree(-90);
+        //alignLeftGripper(rotVal);
         delay(2000);
 
         approachLeftGripper(frontDistance);
@@ -182,8 +210,9 @@ void loop() {
       else if (curVal == 3) {          // keypress 3 for approach preset distance 51
         // Serial.print("status/approaching");
         Serial.print("status/approaching " + String(distVal) + "cm");
-        moveForwardDistance(5);
+        moveForwardDistance(distVal);
         delay(1000);
+        Serial.print("status/idle");
       }
 
       else if (curVal == 15) {
