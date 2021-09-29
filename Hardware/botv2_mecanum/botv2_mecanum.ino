@@ -4,7 +4,24 @@
 #include "SparkFun_MMA8452Q.h"
 #include <LiquidCrystal.h>
 
-bool DistanceOn = false;
+//// ======= BOBETTE ======== //
+//// LAST UPDATED: 210929 12:10 ////
+
+//const int OPEN_DEG_L = 25;
+//const int CLOSE_DEG_L = 80;
+//const int OPEN_DEG_R = 175;//180 - OPEN_DEG
+//const int CLOSE_DEG_R = 100;//180 - CLOSE_DEG
+
+//// ======= BOB ======== ////
+//// LAST UPDATED: 210929 12:30 ////
+
+const int OPEN_DEG_L = 15;
+const int CLOSE_DEG_L = 75;
+const int OPEN_DEG_R = 170;//180 - OPEN_DEG
+const int CLOSE_DEG_R = 90;//180 - CLOSE_DEG
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 bool DisplayOn = true;
 //bool COMMUNICATION_ENABLED = false;
 
@@ -73,10 +90,6 @@ String currentDirection = "stopped";
 bool lowerTriggered = false;
 bool upperTriggered = false;
 
-// GRAB BOOLS
-bool gripperInPosition = false;
-bool test = false;
-
 // left first, right second
 #define R_Gripper 6
 #define L_Gripper 7
@@ -84,8 +97,6 @@ Servo rightGripper;
 Servo leftGripper;
 bool rightGripperClosed = false;
 bool leftGripperClosed = false;
-const int OPEN_DEG = 5;//-30;
-const int CLOSE_DEG = 80;//100//110
 const bool GRIPPER_DEFAULT_OPEN = true;
 char incomingByte; // for incoming serial data
 
@@ -246,11 +257,11 @@ void setup() {
   rightGripper.attach(R_Gripper);
   leftGripper.attach(L_Gripper);
   if (GRIPPER_DEFAULT_OPEN) {
-    rightGripper.write(180 - OPEN_DEG);
-    leftGripper.write(OPEN_DEG);
+    rightGripper.write(OPEN_DEG_R);
+    leftGripper.write(OPEN_DEG_L);
   } else {
-    rightGripper.write(180 - CLOSE_DEG);
-    leftGripper.write(CLOSE_DEG);
+    rightGripper.write(CLOSE_DEG_R);
+    leftGripper.write(CLOSE_DEG_L);
   }
 
   pinMode(sw, INPUT_PULLUP);

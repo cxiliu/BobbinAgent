@@ -122,7 +122,7 @@ void moveRightDistance(int distance) {
   return;
 }
 
-
+// cross motion for robot on the left (facing same way as robot)
 void Cross1(){
   moveBackwardDistance(10);
   delay(500);
@@ -135,6 +135,7 @@ void Cross1(){
   rotateDegree(-180);
 }
 
+// cross motion for robot on the right (facing same way as robot)
 void Cross2(){
   moveForwardDistance(10);
   delay(500);

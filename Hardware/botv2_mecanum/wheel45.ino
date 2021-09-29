@@ -23,11 +23,13 @@ float degreeToSignals(int degree) {
   float scale = 1.0; // somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * (875.0 * degree / 360.0) / 150.8); // mecanum wheel
 //  int steps = int(SLOT_COUNT / scale * (487.0 * degree / 360.0) / 150.8); // omniwheel
-  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
-    Serial.print("angle "); Serial.print(degree); Serial.print(" signal "); Serial.println(steps);
-  }
+//  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
+//    Serial.print("angle "); Serial.print(degree); Serial.print(" signal "); Serial.println(steps);
+//  }
   return steps;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 void GoForward(int distance) {
   SetpointFL = distanceToSignals(distance);
@@ -184,6 +186,8 @@ void Stop() {
   SetBRWheel(false, false);
   currentDirection = "stopped";
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////
 
 //int F_motorSpeed = 98;//0-255, FR
 //int L_motorSpeed = 92;//0-255, FL

@@ -32,7 +32,7 @@
 //  }
 //
 //  // collision avoidance
-//  measureDistance();
+//  measureDistanceFiltered();
 //
 //  // if either one reading is below collision threshold, do something
 //  if ((frontDistance < COLLISION_THRESHOLD) ||

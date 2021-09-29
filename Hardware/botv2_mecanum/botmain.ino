@@ -2,11 +2,6 @@ void loop() {
   // highest priority task
   LoopPID();
 
-  //  if (DistanceOn) {
-  //    measureDistance();
-  //    //  measureDistanceFront();
-  //  }
-
   // COMMUNICATION
   if (Serial.available() > 0) {
     curString = Serial.readStringUntil('\n'); //process incoming byte as a string
@@ -22,27 +17,45 @@ void loop() {
       curString = curString.substring(5);
       distVal = curString.toInt();
     }
-    else if (curString == "w" || curString == "s" || curString == "z" || curString == "a"
-             || curString == "d" || curString == "q" || curString == "e"
-             || curString == "x" || curString == "c" || curString == "h" || curString == "i" || curString == "g" || curString == "u") {
-      incomingByte = curString.charAt(0);
-      LocomotionTest(incomingByte);
-    }
-    else if (curString.indexOf("c1") >= 0) {
-      Cross1();
-    }
-    else if (curString.indexOf("c2") >= 0) {
-      Cross2();
-    }
-    else if (curString.indexOf("setd") >= 0 ) {
+
+    //check if bug in string. then value is for debug cmds
+    else if (curString.indexOf("bug") >= 0) {
       curString = curString.substring(4);
-      SET_DISTANCE = curString.toInt();
-      Serial.println("distance set to " + curString);
-    }
-    else if (curString.indexOf("seta") >= 0 ) {
-      curString = curString.substring(4);
-      SET_ANGLE = curString.toInt();
-      Serial.println("angle set to " + curString);
+      if (curString.indexOf("_c1") >= 0) {
+        Cross1();
+      }
+      else if (curString.indexOf("_c2") >= 0) {
+        Cross2();
+      }
+      else if (curString.indexOf("_setd") >= 0 ) {
+        curString = curString.substring(4);
+        SET_DISTANCE = curString.toInt();
+        Serial.println("distance set to " + curString);
+      }
+      else if (curString.indexOf("_seta") >= 0 ) {
+        curString = curString.substring(4);
+        SET_ANGLE = curString.toInt();
+        Serial.println("angle set to " + curString);
+      }
+      else if (curString.indexOf("_p1") >= 0) {
+        pickupLeftAdaptive(false);
+      }
+      else if (curString.indexOf("_p2") >= 0) {
+        pickupRightAdaptive(false);
+      }
+      else if (curString.indexOf("_pl1") >= 0) {
+        pickupLeftAdaptive(true);
+      }
+      else if (curString.indexOf("_pl2") >= 0) {
+        pickupRightAdaptive(true);
+      }
+      else if (curString.indexOf("w") == 0 || curString.indexOf("s") == 0 || curString.indexOf("z") == 0 || curString.indexOf("a") == 0
+               || curString.indexOf("d") == 0 || curString.indexOf("q") == 0 || curString.indexOf("e") == 0
+               || curString.indexOf("x") == 0 || curString.indexOf("c") == 0 || curString.indexOf("h") == 0
+               || curString.indexOf("i") == 0 || curString.indexOf("g") == 0 || curString.indexOf("u") == 0) {
+        incomingByte = curString.charAt(0);
+        LocomotionTest(incomingByte);
+      }
     }
     //else it is a normal bot instruction
     else {
@@ -52,9 +65,7 @@ void loop() {
       //Serial.print(curVal);
       //Serial.println();
 
-      measureDistance();
-      measureDistanceLeft();
-      measureDistanceRight();
+      measureDistanceFiltered();
 
       if (curVal == 6) {          // keypress 6 sim for distance request 54
         String dPrintText = "distance/";
@@ -105,6 +116,7 @@ void loop() {
       else if (curVal == 4) {          // keypress 4 sim for pickup func. 52
         currentMode = "GrabR";
         Serial.print("status/grabbingRIGHT");
+        //pickupRightAdaptive();
         delay(1000);
         alignRightGripper(rotVal);
         delay(2000);
@@ -122,6 +134,7 @@ void loop() {
       else if (curVal == 13) {
         currentMode = "GrabL";
         Serial.print("status/grabbingLEFT");
+        //pickupLeftAdaptive();
         delay(1000);
         alignLeftGripper(rotVal);
         delay(2000);
@@ -181,16 +194,16 @@ void loop() {
       }
 
       else if (curVal == 17) {
-        moveLeftDistance(10); 
+        moveLeftDistance(10);
       }
       else if (curVal == 18) {
-        moveRightDistance(10); 
+        moveRightDistance(10);
       }
       else if (curVal == 19) {
-        moveForwardDistance(10); 
+        moveForwardDistance(10);
       }
       else if (curVal == 20) {
-        moveBackwardDistance(10); 
+        moveBackwardDistance(10);
       }
     }
   }

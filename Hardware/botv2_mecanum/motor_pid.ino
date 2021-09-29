@@ -1,5 +1,5 @@
 bool PID_DEBUG_VEL = false; // setting this to true affects loop performance
-bool PID_DEBUG_POS = true; // setting this to true affects loop performance
+bool PID_DEBUG_POS = false; // setting this to true affects loop performance
 int STEP_TOLERANCE = 1;
 //const int AGG_TOLERANCE = 1;
 const int APPROACH_TOLERANCE = 4;
@@ -30,13 +30,13 @@ void EndLoop(bool forceStop) {
   LOCOMOTION_ACTIVE = false;
   Stop();
   if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
-    if (forceStop) {
-      PrintEncoderInfo("--- Force Stop ---"); // FR FL BR BL
-    }
-    else {
-      PrintEncoderInfo("--- Motion Complete ---");
-    }
-    Serial.print("loop completed in "); Serial.println(micros() - now);
+//    if (forceStop) {
+//      PrintEncoderInfo("--- Force Stop ---"); // FR FL BR BL
+//    }
+//    else {
+//      PrintEncoderInfo("--- Motion Complete ---");
+//    }
+//    Serial.print("loop completed in "); Serial.println(micros() - now);
   }
   ResetEncoders();
   badCounter = 0;
