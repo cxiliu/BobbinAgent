@@ -14,7 +14,7 @@ float distanceToSignals(int distance) {
   float scale = 1.0; //0.5 omni // somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * 10 * distance * sqrt(2) / 150.8);
   if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
-    Serial.print("distance "); Serial.print(distance); Serial.print(" signal "); Serial.println(steps);
+    // Serial.print("distance "); Serial.print(distance); Serial.print(" signal "); Serial.println(steps);
   }
   return steps;
 }

@@ -142,16 +142,17 @@ void loop() {
       else if (curVal == 4) {          // keypress 4 sim for pickup func. 52
         currentMode = "GrabR";
         Serial.print("status/grabbingRIGHT");
-        //pickupRightAdaptive();
         delay(1000);
-        rotateDegree(90);
-        //alignRightGripper(rotVal);
-        delay(2000);
-
-        approachRightGripper();
-        delay(1000);
-
-        pickupRight();
+        pickupRightAdaptive(true);
+//        delay(1000);
+//        rotateDegree(90);
+//        alignRightGripper(rotVal);
+//        delay(2000);
+//
+//        approachRightGripper();
+//        delay(1000);
+//
+//        pickupRight();
         delay(2000);
         Serial.print("status/idle");
 
@@ -161,16 +162,17 @@ void loop() {
       else if (curVal == 13) {
         currentMode = "GrabL";
         Serial.print("status/grabbingLEFT");
-        //pickupLeftAdaptive();
         delay(1000);
-        rotateDegree(-90);
-        //alignLeftGripper(rotVal);
-        delay(2000);
-
-        approachLeftGripper(frontDistance);
-        delay(1000);
-
-        pickupLeft();
+        pickupLeftAdaptive(true);
+//        delay(1000);
+//        rotateDegree(-90);
+//        alignLeftGripper(rotVal);
+//        delay(2000);
+//
+//        approachLeftGripper(frontDistance);
+//        delay(1000);
+//
+//        pickupLeft();
         delay(2000);
         Serial.print("status/idle");
       }

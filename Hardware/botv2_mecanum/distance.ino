@@ -42,8 +42,8 @@ void measureDistanceFrontFiltered() {
     Serial.print(" - NOISE - ");
     delay(150);
   }
-  Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
-  Serial.print(" AVERAGE FRONT: "); Serial.println((_d1+_d2+_d3)/3);
+  //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
+  //Serial.print(" AVERAGE FRONT: "); Serial.println((_d1+_d2+_d3)/3);
   frontDistance = (_d1+_d2+_d3)/3;
 }
 
@@ -77,8 +77,8 @@ void measureDistanceLeftFiltered() {
     Serial.print(" - NOISE - ");
     delay(150);
   }
-  Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
-  Serial.print(" AVERAGE LEFT: "); Serial.println((_d1+_d2+_d3)/3);
+  //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
+  //Serial.print(" AVERAGE LEFT: "); Serial.println((_d1+_d2+_d3)/3);
   leftDistance = (_d1+_d2+_d3)/3;
 }
 
@@ -112,8 +112,8 @@ void measureDistanceRightFiltered() {
     Serial.print(" - NOISE - ");
     delay(150);
   }
-  Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
-  Serial.print(" AVERAGE RIGHT: "); Serial.println((_d1+_d2+_d3)/3);
+  //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
+  //Serial.print(" AVERAGE RIGHT: "); Serial.println((_d1+_d2+_d3)/3);
   rightDistance = (_d1+_d2+_d3)/3;
 }
 

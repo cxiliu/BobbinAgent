@@ -11,7 +11,7 @@ void pickupRightAdaptive(bool withLift) {
   moveBackwardDistance(2);
   delay(200);
   findOptimalAngle(false);
-  Serial.println(rightDistance);
+  //Serial.println(rightDistance);
   if (rightDistance < SIDE_DISTANCE_GRAB + APPROACH_DISTANCE) {
     moveRightDistance(rightDistance - SIDE_DISTANCE_GRAB);
     delay(200);
@@ -21,7 +21,7 @@ void pickupRightAdaptive(bool withLift) {
       rightGripper.write(CLOSE_DEG_R);
     }
   } else {
-    Serial.println("bobbin is too far to grip right");
+    //Serial.println("bobbin is too far to grip right");
   }
 }
 
@@ -33,7 +33,7 @@ void pickupLeftAdaptive(bool withLift) {
   moveBackwardDistance(2);
   delay(200);
   findOptimalAngle(true);
-  Serial.println(leftDistance);
+  //Serial.println(leftDistance);
   if (leftDistance < SIDE_DISTANCE_GRAB + APPROACH_DISTANCE) {
     moveLeftDistance(leftDistance - SIDE_DISTANCE_GRAB);
     delay(200);
@@ -42,9 +42,9 @@ void pickupLeftAdaptive(bool withLift) {
     } else {
       leftGripper.write(CLOSE_DEG_L);
     }
-    Serial.println("gripped !");
+    //Serial.println("gripped !");
   } else {
-    Serial.println("bobbin is too far to grip left");
+    //Serial.println("bobbin is too far to grip left");
   }
 }
 
@@ -85,12 +85,12 @@ void actuateLeftGripper(bool grippp) {
 bool LowerSwitchTriggered() {
   if (!digitalRead(R_LOW_POS)) {
     lowerTriggered = true;
-    Serial.println("low switch triggered");
+    //Serial.println("low switch triggered");
     return lowerTriggered;
   }
   if (!digitalRead(L_LOW_POS)) {
     lowerTriggered = true;
-    Serial.println("low switch triggered");
+    //Serial.println("low switch triggered");
     return lowerTriggered;
   }
   lowerTriggered = false;
@@ -100,7 +100,7 @@ bool LowerSwitchTriggered() {
 bool TopSwitchTriggered() {
   if (!digitalRead(TOP_POS)) {
     upperTriggered = true;
-    Serial.println("top switch triggered");
+    //Serial.println("top switch triggered");
   } else {
     upperTriggered = false;
   }
@@ -120,8 +120,8 @@ void liftBobbins() {
   delay(100);
   while (count <= NumOfSteps) { // 20mm
     if (TopSwitchTriggered()) {
-      Serial.println("warning: top limit switch preventing movement");
-      Serial.println(count);
+      //Serial.println("warning: top limit switch preventing movement");
+      //Serial.println(count);
       return;
     }
     digitalWrite(DIR, LOW);
@@ -140,8 +140,8 @@ void lowerBobbins() {
   delay(100);
   while (count <= NumOfSteps) { // 20mm
     if (LowerSwitchTriggered()) {
-      Serial.println("warning: lower limit switch preventing movement");
-      Serial.println(count);
+      //Serial.println("warning: lower limit switch preventing movement");
+      //Serial.println(count);
       return;
     }
     digitalWrite(DIR, HIGH);
@@ -164,7 +164,7 @@ void findOptimalAngle(bool isLeft) {
   // populate reading into the list of distances
   int distanceField[SWEEP_STEPS * 2 + 1];
   for (int i = 0; i < SWEEP_STEPS * 2 + 1; i++) {
-    Serial.print("--- position "); Serial.print(i); Serial.print(" : ");
+    //Serial.print("--- position "); Serial.print(i); Serial.print(" : ");
     if (isLeft) {
       measureDistanceLeftFiltered();
       distanceField[i] = leftDistance;
@@ -172,7 +172,7 @@ void findOptimalAngle(bool isLeft) {
       measureDistanceRightFiltered();
       distanceField[i] = rightDistance;
     }
-    Serial.println(distanceField[i]);
+    //Serial.println(distanceField[i]);
     rotateDegree(isLeft? -ANGLE_INCREMENT : ANGLE_INCREMENT);
     delay(200);
   }
@@ -186,10 +186,10 @@ void findOptimalAngle(bool isLeft) {
       minIndex = i;
     }
   }
-  Serial.print(minIndex); Serial.print(" is smallest at "); Serial.println(minDistance);
+  //Serial.print(minIndex); Serial.print(" is smallest at "); Serial.println(minDistance);
 
   // align to the best angle
-  Serial.println("starting to align");
+  //Serial.println("starting to align");
   minDistance += 1; // account for wiggle room
   int attempts = 0;
   if (isLeft) {
@@ -202,29 +202,29 @@ void findOptimalAngle(bool isLeft) {
   while (attempts < SWEEP_STEPS * 2 + 1) {
     if (isLeft) {
       if (leftDistance <= minDistance) {
-        Serial.print(leftDistance); Serial.println(" reached!");
+        //Serial.print(leftDistance); Serial.println(" reached!");
         break;
       } else {
         rotateDegree(isLeft? ANGLE_INCREMENT : -ANGLE_INCREMENT);
         delay(100);
         measureDistanceLeftFiltered();
-        Serial.println(leftDistance);
+        //Serial.println(leftDistance);
       }
     } else {
       if (rightDistance <= minDistance) {
-        Serial.print(rightDistance); Serial.println(" reached!");
+        //Serial.print(rightDistance); Serial.println(" reached!");
         break;
       } else {
         rotateDegree(isLeft? ANGLE_INCREMENT : -ANGLE_INCREMENT);
         delay(100);
         measureDistanceRightFiltered();
-        Serial.println(rightDistance);
+        //Serial.println(rightDistance);
       }
     }
     attempts += 1;
     delay(100);
   }
-  Serial.print("alignment complete after: "); Serial.print(attempts); Serial.println(" turns");
+  //Serial.print("alignment complete after: "); Serial.print(attempts); Serial.println(" turns");
 }
 
 //bool tryGrip() {
