@@ -218,9 +218,11 @@ void loop() {
       }
 
       else if (curVal == 15) {
+        //for the left bot
         Cross1();
       }
       else if (curVal == 16) {
+        //for the right bot
         Cross2();
       }
 
