@@ -14,7 +14,7 @@ float distanceToSignals(int distance) {
   float scale = 1.0; //0.5 omni // somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * 10 * distance * sqrt(2) / 150.8);
   if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
-    // Serial.print("distance "); Serial.print(distance); Serial.print(" signal "); Serial.println(steps);
+    if (SERIAL_PRINT){Serial.print("---------- converting distance "); Serial.print(distance); Serial.print(" to signal "); Serial.println(steps);}
   }
   return steps;
 }
@@ -23,16 +23,16 @@ float degreeToSignals(int degree) {
   float scale = 1.0; // somewhat arbitrary ratio
   int steps = int(SLOT_COUNT / scale * (875.0 * degree / 360.0) / 150.8); // mecanum wheel
 //  int steps = int(SLOT_COUNT / scale * (487.0 * degree / 360.0) / 150.8); // omniwheel
-//  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
-//    Serial.print("angle "); Serial.print(degree); Serial.print(" signal "); Serial.println(steps);
-//  }
+  if (!PID_DEBUG_POS && !PID_DEBUG_VEL) {
+    if (SERIAL_PRINT){Serial.print("---------- converting angle "); Serial.print(degree); Serial.print(" to signal "); Serial.println(steps);}
+  }
   return steps;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 void GoForward(int distance) {
-  SetpointFL = distanceToSignals(distance);
+  SetpointFL = int(distanceToSignals(distance) / 1.65);
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -50,7 +50,7 @@ void GoForward(int distance) {
 }
 
 void GoBackward(int distance) {
-  SetpointFL = distanceToSignals(distance);
+  SetpointFL = int(distanceToSignals(distance) / 1.65);
   SetpointFR = SetpointFL;
   SetpointBR = SetpointFL;
   SetpointBL = SetpointFL;
@@ -282,7 +282,6 @@ void FR_callback() {
   //  if (elapsedTimeFR >= MIN_ELAPSED_TIME)
   //  {
   //    previousTimeFR = millis();
-
   FR_count += FR_reversed ? -1 : 1;
   //  }
   //  else {

@@ -21,32 +21,32 @@ void loop() {
     //check if bug in string. then value is for debug cmds
     else if (curString.indexOf("bug") >= 0) {
       curString = curString.substring(4);
-      if (curString.indexOf("_c1") >= 0) {
+      if (curString.indexOf("c1") >= 0) {
         Cross1();
       }
-      else if (curString.indexOf("_c2") >= 0) {
+      else if (curString.indexOf("c2") >= 0) {
         Cross2();
       }
-      else if (curString.indexOf("_setd") >= 0 ) {
+      else if (curString.indexOf("setd") >= 0 ) {
         curString = curString.substring(4);
         SET_DISTANCE = curString.toInt();
-        Serial.println("distance set to " + curString);
+        if (SERIAL_PRINT){Serial.println("distance set to " + curString);}
       }
-      else if (curString.indexOf("_seta") >= 0 ) {
+      else if (curString.indexOf("seta") >= 0 ) {
         curString = curString.substring(4);
         SET_ANGLE = curString.toInt();
-        Serial.println("angle set to " + curString);
+        if (SERIAL_PRINT){Serial.println("angle set to " + curString);}
       }
-      else if (curString.indexOf("_p1") >= 0) {
+      else if (curString.indexOf("p1") >= 0) {
         pickupLeftAdaptive(false);
       }
-      else if (curString.indexOf("_p2") >= 0) {
+      else if (curString.indexOf("p2") >= 0) {
         pickupRightAdaptive(false);
       }
-      else if (curString.indexOf("_pl1") >= 0) {
+      else if (curString.indexOf("pl1") >= 0) {
         pickupLeftAdaptive(true);
       }
-      else if (curString.indexOf("_pl2") >= 0) {
+      else if (curString.indexOf("pl2") >= 0) {
         pickupRightAdaptive(true);
       }
       else if (curString.indexOf("w") == 0 || curString.indexOf("s") == 0 || curString.indexOf("z") == 0 || curString.indexOf("a") == 0

@@ -34,22 +34,24 @@ void LocomotionTest(int _receivedByte) {
     Serial.println("lifting bobbins");
     liftBobbins();
     Serial.println("done");
-    //      actuateLeftGripper(true); //g - grip
+    //      actuateLeftGripper(true); //g - lift
     delay(500);
   }
   else if (_receivedByte == 117) {
     Serial.println("lowering bobbins");
     lowerBobbins();
     Serial.println("done");
-    //      actuateLeftGripper(false); //u - ungrip
+    //      actuateLeftGripper(false); //u - lower
     delay(500);
   }
   else if (_receivedByte == 104) {
     measureDistanceFiltered();
     String lin = "F:" + String(frontDistance) + " R:" + String(rightDistance) + " L:" + String(leftDistance) + "   ";
     Serial.println(lin);
-    rightGripper.write(CLOSE_DEG_R);
-    leftGripper.write(CLOSE_DEG_L);
+    setLeftGripper(true);
+    setRightGripper(true);
+//    rightGripper.write(CLOSE_DEG_R);
+//    leftGripper.write(CLOSE_DEG_L);
     //      actuateRightGripper(true); //h - grip
     delay(500);
   }
@@ -57,8 +59,10 @@ void LocomotionTest(int _receivedByte) {
     measureDistanceFiltered();
     String lin = "F:" + String(frontDistance) + " R:" + String(rightDistance) + " L:" + String(leftDistance) + "   ";
     Serial.println(lin);
-    rightGripper.write(OPEN_DEG_R);
-    leftGripper.write(OPEN_DEG_L);
+    setLeftGripper(false);
+    setRightGripper(false);
+//    rightGripper.write(OPEN_DEG_R);
+//    leftGripper.write(OPEN_DEG_L);
     //      actuateRightGripper(false); //i - ungrip
     delay(500);
   }

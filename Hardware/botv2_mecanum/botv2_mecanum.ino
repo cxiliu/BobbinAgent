@@ -4,26 +4,43 @@
 #include "SparkFun_MMA8452Q.h"
 #include <LiquidCrystal.h>
 
-//// ======= BOBETTE ======== //
-//// LAST UPDATED: 210929 12:10 ////
+bool SERIAL_PRINT = false;
 
-//const int OPEN_DEG_L = 25;
-//const int CLOSE_DEG_L = 80;
-//const int OPEN_DEG_R = 175;//180 - OPEN_DEG
-//const int CLOSE_DEG_R = 100;//180 - CLOSE_DEG
+//// ======= BOBETTE ======== //
+//// LAST UPDATED: 211009 14:30 //// 
+
+const int OPEN_DEG_L = 95;//50 //25
+const int CLOSE_DEG_L = 170; //80
+const int OPEN_DEG_R = 175;//180 - OPEN_DEG
+const int CLOSE_DEG_R = 1 00;//180 - CLOSE_DEG
+const int minPwm_front = 75; //right driver chip // tested minimum before motor stalls: 75
+const int maxPwm_front = 120; //right driver chip //measured voltage equivalent: 4.46 V
+const int minPwm_BL = 130; //left driver chip 
+const int maxPwm_BL = 180; //left driver chip 
+const int minPwm_BR= 120; //left driver chip 
+const int maxPwm_BR= 170; //left driver chip 
 
 //// ======= BOB ======== ////
-//// LAST UPDATED: 210929 12:30 ////
+//// LAST UPDATED: 211009 11:40 ////
 
-const int OPEN_DEG_L = 15;
-const int CLOSE_DEG_L = 75;
-const int OPEN_DEG_R = 170;//180 - OPEN_DEG
-const int CLOSE_DEG_R = 90;//180 - CLOSE_DEG
+//const int OPEN_DEG_L = 15;
+//const int CLOSE_DEG_L = 75;
+//const int OPEN_DEG_R = 170;//180 - OPEN_DEG
+//const int CLOSE_DEG_R = 90;//180 - CLOSE_DEG
+//const int minPwm_front = 75; //right driver chip // tested minimum before motor stalls: 75
+//const int maxPwm_front = 120; //right driver chip //measured voltage equivalent: 4.46 V
+//const int minPwm_BL = 95; //left driver chip 
+//const int maxPwm_BL = 140; //left driver chip 
+//const int minPwm_BR= 75; //left driver chip 
+//const int maxPwm_BR= 115; //left driver chip 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-bool DisplayOn = true;
+bool DisplayOn = false;
 //bool COMMUNICATION_ENABLED = false;
+
+const int CROSS_DISTANCE_H = 20;
+const int CROSS_DISTANCE_V = 30;
 
 // wheels
 // BACK - LEFT BACK WHEEL - LEFT CHIP IN1IN2 (in1 CC)
@@ -95,8 +112,8 @@ bool upperTriggered = false;
 #define L_Gripper 7
 Servo rightGripper;
 Servo leftGripper;
-bool rightGripperClosed = false;
-bool leftGripperClosed = false;
+bool rightGripperClosed;
+bool leftGripperClosed;
 const bool GRIPPER_DEFAULT_OPEN = true;
 char incomingByte; // for incoming serial data
 
@@ -176,8 +193,6 @@ int badCounter = 0;
 unsigned long previousMicros;
 unsigned long previousMillis;
 int motorUpdateTime = 0;
-int minPwm = 75; // tested minimum before motor stalls: 75
-int maxPwm = 120; //measured voltage equivalent: 4.46 V
 
 //COMM TEST - variables
 int SET_DISTANCE = 10; // distance to travel per key press (UNIT IS CM!)
@@ -197,13 +212,6 @@ void setup() {
   //COMM TEST - initialize bobbin count to 0
 //    Serial.print("bobbins/0");
 
-  //  for (int i=0; i<360; i++){
-  //    Serial.print(i);
-  //    Serial.print("    ");
-  //    long number = (i * 40 * 487.0) / (360 * 150.8);
-  //    Serial.println(int(number));
-  //  }
-  //
   pinMode(B_enA, OUTPUT);
   pinMode(B_in1, OUTPUT);
   pinMode(B_in2, OUTPUT);
@@ -249,7 +257,9 @@ void setup() {
   if (IMU_ACTIVE) {
     Wire.begin(); //initiate the Wire library and join the I2C bus as master, occupies pin 20/21 on Arduino mega
     if (accel.begin() == false) {
-      Serial.println("Compass not Connected");
+      if (SERIAL_PRINT){
+        Serial.println("Compass not Connected");
+      }
     }
   }
 
@@ -257,11 +267,11 @@ void setup() {
   rightGripper.attach(R_Gripper);
   leftGripper.attach(L_Gripper);
   if (GRIPPER_DEFAULT_OPEN) {
-    rightGripper.write(OPEN_DEG_R);
-    leftGripper.write(OPEN_DEG_L);
+    setLeftGripper(false);
+    setRightGripper(false);
   } else {
-    rightGripper.write(CLOSE_DEG_R);
-    leftGripper.write(CLOSE_DEG_L);
+    setLeftGripper(true);
+    setRightGripper(true);
   }
 
   pinMode(sw, INPUT_PULLUP);

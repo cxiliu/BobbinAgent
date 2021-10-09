@@ -1,25 +1,3 @@
-//String measureHeading() {
-//  if (accel.available()) {
-//    // Acceleration of x, y, and z directions in g units
-//    //    Serial.print(accel.getCalculatedX(), 3);
-//    //    Serial.print("\t");
-//    //    Serial.print(accel.getCalculatedY(), 3);
-//    //    Serial.print("\t");
-//    //    Serial.print(accel.getCalculatedZ(), 3);
-//    //    Serial.println();
-//    float x = (accel.getCalculatedX() - 0.008) * 1000;
-//    float y = (accel.getCalculatedY() - 0.135) * 1000;
-//    //    float angle = atan(y/x)/3.1415*180;
-//    //    Serial.println(angle);
-//    //    return (int)angle;
-//    return "Heading: x" +  String(int(x)) + " y" + String(int(y)) + "     ";
-//  }
-//  else {
-//    Serial.println("not avail");
-//    return "no data";
-//  }
-//}
-
 void measureDistanceFiltered() {
   measureDistanceFrontFiltered();
   measureDistanceLeftFiltered();
@@ -27,6 +5,7 @@ void measureDistanceFiltered() {
 }
 
 void measureDistanceFrontFiltered() {
+  delay(300);
   int _d1, _d2, _d3;
   _d1 = measureDistanceFront();
   delay(150);
@@ -39,7 +18,7 @@ void measureDistanceFrontFiltered() {
     _d2 = measureDistanceFront();
     delay(150);
     _d3 = measureDistanceFront();
-    Serial.print(" - NOISE - ");
+    if (SERIAL_PRINT){Serial.print(" - NOISE - ");}
     delay(150);
   }
   //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
@@ -62,6 +41,7 @@ int measureDistanceFront() {
 }
 
 void measureDistanceLeftFiltered() {
+  delay(300);
   int _d1, _d2, _d3;
   _d1 = measureDistanceLeft();
   delay(150);
@@ -74,7 +54,7 @@ void measureDistanceLeftFiltered() {
     _d2 = measureDistanceLeft();
     delay(150);
     _d3 = measureDistanceLeft();
-    Serial.print(" - NOISE - ");
+    if (SERIAL_PRINT){Serial.print(" - NOISE - ");}
     delay(150);
   }
   //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
@@ -97,6 +77,7 @@ int measureDistanceLeft() {
 }
 
 void measureDistanceRightFiltered() {
+  delay(300);
   int _d1, _d2, _d3;
   _d1 = measureDistanceRight();
   delay(150);
@@ -109,11 +90,11 @@ void measureDistanceRightFiltered() {
     _d2 = measureDistanceRight();
     delay(150);
     _d3 = measureDistanceRight();
-    Serial.print(" - NOISE - ");
+    if (SERIAL_PRINT){Serial.print(" - NOISE - ");}
     delay(150);
   }
-  //Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
-  //Serial.print(" AVERAGE RIGHT: "); Serial.println((_d1+_d2+_d3)/3);
+//  Serial.print("first value: "); Serial.print(_d1); Serial.print(" second value: "); Serial.print(_d2); Serial.print(" third value: "); Serial.print(_d3); 
+//  Serial.print(" AVERAGE RIGHT: "); Serial.println((_d1+_d2+_d3)/3);
   rightDistance = (_d1+_d2+_d3)/3;
 }
 

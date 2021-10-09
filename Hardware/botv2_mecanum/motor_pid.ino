@@ -51,7 +51,6 @@ void MotorPID() {
 
   // do PID every 10 ms (while loop is around 1 ms)
   if (motorUpdateTime > 10000) {
-
     // prevent disasters
     if (badCounter >= FORCE_STOP_COUNT) {
       EndLoop(true);
@@ -60,6 +59,8 @@ void MotorPID() {
       STEP_TOLERANCE = 1;
     } 
 
+    setGrippers();
+    
     //    float secEllpased = motorUpdateTime / 1000000.f;
     motorUpdateTime -= 10000;
     if (PID_DEBUG_POS) {
@@ -88,13 +89,13 @@ void MotorPID() {
       int currentPwmFR = OutputFR;
       if (currentPwmFR > 0) {
         FR_reversed = false;
-        currentPwmFR = map(currentPwmFR, 0, 100, minPwm, maxPwm);
+        currentPwmFR = map(currentPwmFR, 0, 100, minPwm_front, maxPwm_front);
         SetFRWheel(true, FR_direction);
         analogWrite(F_enA, currentPwmFR);
       }
       else {
         FR_reversed = true;
-        currentPwmFR = map(-currentPwmFR, 0, 100, minPwm, maxPwm);
+        currentPwmFR = map(-currentPwmFR, 0, 100, minPwm_front, maxPwm_front);
         SetFRWheel(true, !FR_direction);
         analogWrite(F_enA, currentPwmFR);
       }
@@ -129,13 +130,13 @@ void MotorPID() {
       int currentPwmFL = OutputFL;
       if (currentPwmFL > 0) {
         FL_reversed = false;
-        currentPwmFL = map(currentPwmFL, 0, 100, minPwm, maxPwm);
+        currentPwmFL = map(currentPwmFL, 0, 100, minPwm_front, maxPwm_front);
         SetFLWheel(true, FL_direction);
         analogWrite(L_enA, currentPwmFL);
       }
       else {
         FL_reversed = true;
-        currentPwmFL = map(-currentPwmFL, 0, 100, minPwm, maxPwm);
+        currentPwmFL = map(-currentPwmFL, 0, 100, minPwm_front, maxPwm_front);
         SetFLWheel(true, !FL_direction);
         analogWrite(L_enA, currentPwmFL);
       }
@@ -175,13 +176,13 @@ void MotorPID() {
       int currentPwmBR = OutputBR;
       if (currentPwmBR > 0) {
         BR_reversed = false;
-        currentPwmBR = map(currentPwmBR, 0, 100, minPwm, maxPwm);
+        currentPwmBR = map(currentPwmBR, 0, 100, minPwm_BR, maxPwm_BR);
         SetBRWheel(true, BR_direction);
         analogWrite(R_enA, currentPwmBR);
       }
       else {
         BR_reversed = true;
-        currentPwmBR = map(-currentPwmBR, 0, 100, minPwm, maxPwm);
+        currentPwmBR = map(-currentPwmBR, 0, 100, minPwm_BR, maxPwm_BR);
         SetBRWheel(true, !BR_direction);
         analogWrite(R_enA, currentPwmBR);
       }
@@ -217,13 +218,13 @@ void MotorPID() {
       int currentPwmBL = OutputBL;
       if (currentPwmBL > 0) {
         BL_reversed = false;
-        currentPwmBL = map(currentPwmBL, 0, 100, minPwm, maxPwm);
+        currentPwmBL = map(currentPwmBL, 0, 100, minPwm_BL, maxPwm_BL);
         SetBLWheel(true, BL_direction);
         analogWrite(B_enA, currentPwmBL);
       }
       else {
         BL_reversed = true;
-        currentPwmBL = map(-currentPwmBL, 0, 100, minPwm, maxPwm);
+        currentPwmBL = map(-currentPwmBL, 0, 100, minPwm_BL, maxPwm_BL);
         SetBLWheel(true, !BL_direction);
         analogWrite(B_enA, currentPwmBL);
       }
